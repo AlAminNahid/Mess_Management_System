@@ -51,7 +51,7 @@ export class AuthService {
             throw new BadRequestException('User not found');
         }
 
-        const valid = await bcrypt.compare(oldPassword, newPassword);
+        const valid = await bcrypt.compare(oldPassword, existing.password);
         if(!valid) {
             throw new BadRequestException('Old password is not matched');
         }
@@ -61,6 +61,27 @@ export class AuthService {
         const user = await this.usersRepository.update({email}, {password : hashPassword});
 
         console.log('User password updated successfuly');
+
+        const {password: _, ...result} = user as any;
+
+        return result;
+    }
+
+    async forgetPassword(email : string, newPassword : string, confirmPassword : string) : Promise<UsersEntity> {
+        const existing = await this.usersRepository.findOne({where : {email}});
+        if(!existing) {
+            throw new BadRequestException('User not found');
+        }
+
+        if (newPassword !== confirmPassword) {
+            throw new BadRequestException(`New password and Confirm password didn't match`);
+        }
+
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(newPassword, salt);
+        const user = await this.usersRepository.update({email}, {password : hashPassword});
+
+        console.log('Forget password is done');
 
         const {password: _, ...result} = user as any;
 

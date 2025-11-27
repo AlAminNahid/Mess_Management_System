@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, Matches } from "class-validator";
 
-export class changePasswordDTO{
+export class forgetPasswordDTO{
     @IsString()
     @IsNotEmpty({
         message : `Email can't be empty.`
@@ -17,8 +17,8 @@ export class changePasswordDTO{
     @Matches(/^.*(?=[@#$&]).*$/, {
         message : 'Password must contain any of this (@ or # or $ or &) speical characters'
     })
-    oldPassword : string;
-    
+    newPassword : string;
+
     @IsString()
     @IsNotEmpty({
         message : `Password can't be empty.`
@@ -26,5 +26,5 @@ export class changePasswordDTO{
     @Matches(/^.*(?=[@#$&]).*$/, {
         message : 'Password must contain any of this (@ or # or $ or &) speical characters'
     })
-    newPassword : string;
+    confirmPassword : string;
 }

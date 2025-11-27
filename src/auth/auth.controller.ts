@@ -4,6 +4,7 @@ import { registrationDTO } from 'src/dtos/registration.dto';
 import { UsersEntity } from 'src/entitie/users.entity';
 import { loginDTO } from 'src/dtos/login.dto';
 import { changePasswordDTO } from 'src/dtos/changePassword.dto';
+import { forgetPasswordDTO } from 'src/dtos/forgetPassword.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -31,5 +32,13 @@ export class AuthController {
         @Body() info : changePasswordDTO
     ) : Promise<UsersEntity> {
         return this.authService.changePassword(info.email, info.oldPassword, info.newPassword);
+    }
+
+    @Patch('forgetPassword')
+    @UsePipes(new ValidationPipe())
+    forgetPassword(
+        @Body() info : forgetPasswordDTO
+    ) : Promise<UsersEntity> {
+        return this.authService.forgetPassword(info.email, info.newPassword, info.confirmPassword);
     }
 }
