@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength, IsIn, IsBoolean, Matches } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, MaxLength, IsIn, IsBoolean, Matches, MinLength, IsEnum } from "class-validator";
+import { UserRole } from "src/dtos/role.enum";
 
 export class registrationDTO{
     @IsString()
@@ -26,22 +27,23 @@ export class registrationDTO{
     @IsNotEmpty({
         message : `Password can't be empty.`
     })
+    @MinLength(6, { 
+        message: 'Password must be at least 6 characters long' 
+    })
     @Matches(/^.*(?=[@#$&]).*$/, {
         message : 'Password must contain any of this (@ or # or $ or &) speical characters'
     })
     password : string;
 
     @IsOptional()
-    @IsString()
-    @IsIn(['manager', 'member', 'admin'], {
-        message : 'Role can only contain manager, member and admin'
+    @IsEnum(UserRole, {
+        message : 'Role must be manager, member or admin'
     })
     role : string;
 
     @IsOptional()
-    @IsBoolean()
-    @IsIn([true, false], {
-        message : 'is_active can only contain true or false'
+    @IsBoolean({
+        message: 'is_active must be either true or false'
     })
     is_active : boolean;
 

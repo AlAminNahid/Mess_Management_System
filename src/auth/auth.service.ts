@@ -3,16 +3,35 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/entitie/users.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt'
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
     constructor(
         @InjectRepository(UsersEntity)
-        private usersRepository : Repository<UsersEntity>
+        private usersRepository : Repository<UsersEntity>,
+        private jwtService : JwtService
     ){}
 
+    async adminRegistration(name : string, email : string, password : string, role : string, nid : string, phone : string) : Promise<UsersEntity> {
+        const existing = await this.usersRepository.findOne({where : {email}});
+        if(existing) {
+            throw new BadRequestException('Email already registered');
+        }
+
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(password, salt);
+        const user = await this.usersRepository.create({name, email, password : hashPassword, role, nid, phone});
+        await this.usersRepository.save(user);
+
+        console.log('Admin created successfully');
+
+        const {password: _, ...result} = user as any;
+        return result;
+    }
+
     async registration(name : string, email : string, password : string, nid : string, phone : string) : Promise<UsersEntity> {
-        const existing = await this.usersRepository.findOne({where : {email}})
+        const existing = await this.usersRepository.findOne({where : {email}});
         if(existing){
             throw new BadRequestException('Email already registered');
         }
@@ -28,7 +47,7 @@ export class AuthService {
         return result;
     }
 
-    async login(email : string, password : string) : Promise<UsersEntity> {
+    async login(email : string, password : string) {
         const user = await this.usersRepository.findOne({where : {email}});
         if(!user) {
             throw new BadRequestException('Invalid credentials');
@@ -41,8 +60,15 @@ export class AuthService {
 
         console.log('Users login successful');
 
-        const {password: _, ...result} = user as any;
-        return result;
+        const payload = {
+            sub : user.id,
+            email : user.email,
+            role : user.role
+        };
+
+        return {
+            access_token : await this.jwtService.signAsync(payload)
+        };
     }
 
     async changePassword(email : string, oldPassword : string, newPassword : string) : Promise<UsersEntity>{

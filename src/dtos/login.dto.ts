@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Matches } from "class-validator";
+import { IsNotEmpty, IsString, Matches, MinLength } from "class-validator";
 
 export class loginDTO{
     @IsString()
@@ -13,6 +13,9 @@ export class loginDTO{
     @IsString()
     @IsNotEmpty({
         message : `Password can't be empty.`
+    })
+    @MinLength(6, { 
+        message: 'Password must be at least 6 characters long' 
     })
     @Matches(/^.*(?=[@#$&]).*$/, {
         message : 'Password must contain any of this (@ or # or $ or &) speical characters'
