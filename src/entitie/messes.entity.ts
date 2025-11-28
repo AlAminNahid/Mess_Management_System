@@ -1,4 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn, ManyToOne } from "typeorm";
+import { CostsEntity } from "./costs.entity";
+import { MealsEntity } from "./meals.entity";
+import { UsersEntity } from "./users.entity";
 
 @Entity('messes')
 export class MessesEntity {
@@ -16,14 +19,21 @@ export class MessesEntity {
     })
     address: string;
 
-    @Column({
-        type: 'int'
+    @ManyToOne(() => UsersEntity, (user) => user.messes)
+    @JoinColumn({
+        name : 'manager_id'
     })
-    manager_id: number;
+    user : UsersEntity;
 
     @CreateDateColumn()
     created_at: string;
 
     @UpdateDateColumn()
     updated_at: string;
+
+    @OneToMany(() => CostsEntity, (costs) => costs.mess)
+    costs : CostsEntity[];
+    
+    @OneToMany(() => MealsEntity, (meals) => meals.mess)
+    meals : MealsEntity;
 }

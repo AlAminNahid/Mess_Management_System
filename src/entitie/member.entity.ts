@@ -1,15 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { UsersEntity } from "./users.entity";
 
 @Entity('members')
 export class MembersEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'int' })
-    mess_id: number;
-
-    @Column({ type: 'int' })
-    user_id: number;
+    @ManyToOne(() => UsersEntity, (user) => user.member)
+    @JoinColumn({
+        name : 'user_id'
+    })
+    user : UsersEntity;
 
     @Column({
         type: 'enum',
@@ -18,7 +19,9 @@ export class MembersEntity {
     })
     is_active: boolean;
 
-    @Column({ type: 'date', nullable: true })
+    @Column({
+        type: 'date', nullable: true
+    })
     leave_date: string;
 
     @Column({ type: 'date' })

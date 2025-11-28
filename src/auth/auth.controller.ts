@@ -10,14 +10,6 @@ import { forgetPasswordDTO } from 'src/dtos/forgetPassword.dto';
 export class AuthController {
     constructor(private readonly authService : AuthService){}
 
-    @Post('adminRegistration')
-    @UsePipes(new ValidationPipe())
-    adminRegistration(
-        @Body() info : registrationDTO
-    ) : Promise<UsersEntity> {
-        return this.authService.adminRegistration(info.name, info.email, info.password, info.role, info.nid, info.phone)
-    }
-
     @Post('registration')
     @UsePipes(new ValidationPipe())
     registration(

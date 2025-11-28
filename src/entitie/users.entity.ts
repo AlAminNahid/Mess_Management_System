@@ -1,5 +1,9 @@
 import { IsOptional } from "class-validator";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { MealsEntity } from "./meals.entity";
+import { MembersEntity } from "./member.entity";
+import { ExpenseIterationsEntity } from "./expense_iterations.entity";
+import { MessesEntity } from "./messes.entity";
 
 @Entity('users')
 export class UsersEntity{
@@ -63,4 +67,19 @@ export class UsersEntity{
 
     @UpdateDateColumn()
     updated_at : string;
+
+    @OneToMany(() => MealsEntity, (meals) => meals.user)
+    meals : MealsEntity[];
+
+    @OneToMany(() => MembersEntity, (member) => member.user)
+    member : MembersEntity[];
+
+    @OneToMany(() => ExpenseIterationsEntity, (expenseIteration) => expenseIteration.user)
+    expenseIteration : ExpenseIterationsEntity[];
+
+    @OneToMany(() => ExpenseIterationsEntity, (expense) => expense.users)
+    expense : ExpenseIterationsEntity[];
+
+    @OneToMany(() => MessesEntity, (messes) => messes.user)
+    messes : MealsEntity[];
 }

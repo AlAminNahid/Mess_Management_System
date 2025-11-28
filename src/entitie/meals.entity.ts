@@ -1,22 +1,37 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { UsersEntity } from "./users.entity";
+import { MessesEntity } from "./messes.entity";
 
 @Entity('meals')
 export class MealsEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'int' })
-    mess_id: number;
+    @ManyToOne(() => MessesEntity, (mess) => mess.meals)
+    @JoinColumn({
+        name : 'mess_id'
+    })
+    mess : MessesEntity;
 
-    @Column({ type: 'int' })
-    user_id: number;
+    @ManyToOne(() => UsersEntity, (user) => user.meals)
+    @JoinColumn({
+        name : 'users_id'
+    })
+    user : UsersEntity;
 
-    @Column({ type: 'date' })
+    @Column({
+        type: 'date'
+    })
     date: string;
 
-    @Column({ type: 'int', default: 0 })
+    @Column({
+        type: 'int', 
+        default: 0 
+    })
     lunch_count: number;
 
-    @Column({ type: 'int', default: 0 })
+    @Column({
+        type: 'int', default: 0
+    })
     dinner_count: number;
 }

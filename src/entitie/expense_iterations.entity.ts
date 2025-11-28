@@ -1,15 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { UsersEntity } from "./users.entity";
 
 @Entity('expense_iterations')
 export class ExpenseIterationsEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'int' })
-    member_id: number;
-
-    @Column({ type: 'int' })
-    mess_id: number;
+    @ManyToOne(() => UsersEntity, (users) => users.expense)
+    @JoinColumn({
+        name : 'member_id'
+    })
+    users : UsersEntity;
 
     @Column({
         type: 'decimal',
@@ -24,6 +25,9 @@ export class ExpenseIterationsEntity {
     @Column({ type: 'text' })
     description: string;
 
-    @Column({ type: 'int' })
-    manager_id: number;
+    @ManyToOne(() => UsersEntity, (user) => user.expenseIteration)
+    @JoinColumn({
+        name : 'manager_id'
+    })
+    user : UsersEntity;
 }
