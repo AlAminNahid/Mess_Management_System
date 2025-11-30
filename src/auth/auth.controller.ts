@@ -1,44 +1,57 @@
-import { Body, Controller, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { registrationDTO } from 'src/dtos/registration.dto';
-import { UsersEntity } from 'src/entitie/users.entity';
+import { UsersEntity } from 'src/entities/users.entity';
 import { loginDTO } from 'src/dtos/login.dto';
 import { changePasswordDTO } from 'src/dtos/changePassword.dto';
 import { forgetPasswordDTO } from 'src/dtos/forgetPassword.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService : AuthService){}
+  constructor(private readonly authService: AuthService) {}
 
-    @Post('registration')
-    @UsePipes(new ValidationPipe())
-    registration(
-        @Body() info : registrationDTO
-    ) : Promise<UsersEntity>{
-        return this.authService.registration(info.name, info.email, info.password, info.nid, info.phone);
-    }
+  @Post('registration')
+  @UsePipes(new ValidationPipe())
+  registration(@Body() info: registrationDTO): Promise<UsersEntity> {
+    return this.authService.registration(
+      info.name,
+      info.email,
+      info.password,
+      info.nid,
+      info.phone,
+    );
+  }
 
-    @Post('login')
-    @UsePipes(new ValidationPipe())
-    login(
-        @Body() info : loginDTO
-    ) {
-        return this.authService.login(info.email, info.password);
-    }
+  @Post('login')
+  @UsePipes(new ValidationPipe())
+  login(@Body() info: loginDTO) {
+    return this.authService.login(info.email, info.password);
+  }
 
-    @Patch('changePassword')
-    @UsePipes(new ValidationPipe())
-    changePassword(
-        @Body() info : changePasswordDTO
-    ) : Promise<UsersEntity> {
-        return this.authService.changePassword(info.email, info.oldPassword, info.newPassword);
-    }
+  @Patch('changePassword')
+  @UsePipes(new ValidationPipe())
+  changePassword(@Body() info: changePasswordDTO): Promise<UsersEntity> {
+    return this.authService.changePassword(
+      info.email,
+      info.oldPassword,
+      info.newPassword,
+    );
+  }
 
-    @Patch('forgetPassword')
-    @UsePipes(new ValidationPipe())
-    forgetPassword(
-        @Body() info : forgetPasswordDTO
-    ) : Promise<UsersEntity> {
-        return this.authService.forgetPassword(info.email, info.newPassword, info.confirmPassword);
-    }
+  @Patch('forgetPassword')
+  @UsePipes(new ValidationPipe())
+  forgetPassword(@Body() info: forgetPasswordDTO): Promise<UsersEntity> {
+    return this.authService.forgetPassword(
+      info.email,
+      info.newPassword,
+      info.confirmPassword,
+    );
+  }
 }

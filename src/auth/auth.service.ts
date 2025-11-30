@@ -1,99 +1,126 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity } from 'src/entitie/users.entity';
+import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        @InjectRepository(UsersEntity)
-        private usersRepository : Repository<UsersEntity>,
-        private jwtService : JwtService
-    ){}
+  constructor(
+    @InjectRepository(UsersEntity)
+    private usersRepository: Repository<UsersEntity>,
+    private jwtService: JwtService,
+  ) {}
 
-    async registration(name : string, email : string, password : string, nid : string, phone : string) : Promise<UsersEntity> {
-        const existing = await this.usersRepository.findOne({where : {email}});
-        if(existing){
-            throw new BadRequestException('Email already registered');
-        }
-        
-        const salt = await bcrypt.genSalt();
-        const hashPassword = await bcrypt.hash(password, salt);
-        const user = await this.usersRepository.create({name, email, password : hashPassword, nid, phone});
-        await this.usersRepository.save(user);
-
-        console.log('Users registration successful');
-
-        const {password: _, ...result} = user as any;
-        return result;
+  async registration(
+    name: string,
+    email: string,
+    password: string,
+    nid: string,
+    phone: string,
+  ): Promise<UsersEntity> {
+    const existing = await this.usersRepository.findOne({ where: { email } });
+    if (existing) {
+      throw new BadRequestException('Email already registered');
     }
 
-    async login(email : string, password : string) {
-        const user = await this.usersRepository.findOne({where : {email}});
-        if(!user) {
-            throw new BadRequestException('Invalid credentials');
-        }
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(password, salt);
+    const user = await this.usersRepository.create({
+      name,
+      email,
+      password: hashPassword,
+      nid,
+      phone,
+    });
+    await this.usersRepository.save(user);
 
-        const valid = await bcrypt.compare(password, user.password);
-        if(!valid) {
-            throw new BadRequestException('Invalid password')
-        }
+    console.log('Users registration successful');
 
-        console.log('Users login successful');
+    const { password: _, ...result } = user as any;
+    return result;
+  }
 
-        const payload = {
-            sub : user.id,
-            email : user.email,
-            role : user.role
-        };
-
-        return {
-            access_token : await this.jwtService.signAsync(payload)
-        };
+  async login(email: string, password: string) {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new BadRequestException('Invalid credentials');
     }
 
-    async changePassword(email : string, oldPassword : string, newPassword : string) : Promise<UsersEntity>{
-        const existing = await this.usersRepository.findOne({where : {email}});
-        if(!existing) {
-            throw new BadRequestException('User not found');
-        }
-
-        const valid = await bcrypt.compare(oldPassword, existing.password);
-        if(!valid) {
-            throw new BadRequestException('Old password is not matched');
-        }
-
-        const salt = await bcrypt.genSalt();
-        const hashPassword = await bcrypt.hash(newPassword, salt);
-        const user = await this.usersRepository.update({email}, {password : hashPassword});
-
-        console.log('User password updated successfuly');
-
-        const {password: _, ...result} = user as any;
-
-        return result;
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      throw new BadRequestException('Invalid password');
     }
 
-    async forgetPassword(email : string, newPassword : string, confirmPassword : string) : Promise<UsersEntity> {
-        const existing = await this.usersRepository.findOne({where : {email}});
-        if(!existing) {
-            throw new BadRequestException('User not found');
-        }
+    console.log('Users login successful');
 
-        if (newPassword !== confirmPassword) {
-            throw new BadRequestException(`New password and Confirm password didn't match`);
-        }
+    const payload = {
+      sub: user.id,
+      email: user.email,
+    };
 
-        const salt = await bcrypt.genSalt();
-        const hashPassword = await bcrypt.hash(newPassword, salt);
-        const user = await this.usersRepository.update({email}, {password : hashPassword});
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
+  }
 
-        console.log('Forget password is done');
-
-        const {password: _, ...result} = user as any;
-
-        return result;
+  async changePassword(
+    email: string,
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<UsersEntity> {
+    const existing = await this.usersRepository.findOne({ where: { email } });
+    if (!existing) {
+      throw new BadRequestException('User not found');
     }
+
+    const valid = await bcrypt.compare(oldPassword, existing.password);
+    if (!valid) {
+      throw new BadRequestException('Old password is not matched');
+    }
+
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(newPassword, salt);
+    const user = await this.usersRepository.update(
+      { email },
+      { password: hashPassword },
+    );
+
+    console.log('User password updated successfuly');
+
+    const { password: _, ...result } = user as any;
+
+    return result;
+  }
+
+  async forgetPassword(
+    email: string,
+    newPassword: string,
+    confirmPassword: string,
+  ): Promise<UsersEntity> {
+    const existing = await this.usersRepository.findOne({ where: { email } });
+    if (!existing) {
+      throw new BadRequestException('User not found');
+    }
+
+    if (newPassword !== confirmPassword) {
+      throw new BadRequestException(
+        `New password and Confirm password didn't match`,
+      );
+    }
+
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(newPassword, salt);
+    const user = await this.usersRepository.update(
+      { email },
+      { password: hashPassword },
+    );
+
+    console.log('Forget password is done');
+
+    const { password: _, ...result } = user as any;
+
+    return result;
+  }
 }
