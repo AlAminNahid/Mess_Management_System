@@ -7,10 +7,20 @@ import { MealExpenseIterationsEntity } from 'src/entities/meal_expense_iteration
 import { UtilityCostsEntity } from 'src/entities/utility_costs.entity';
 import { MembersEntity } from 'src/entities/members.entity';
 import { UsersEntity } from 'src/entities/users.entity';
+import { MessesEntity } from 'src/entities/messes.entity';
 
 @Module({
-  imports : [TypeOrmModule.forFeature([MealsEntity, MealExpenseIterationsEntity, UtilityCostsEntity, MembersEntity, UsersEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      MealsEntity,
+      MealExpenseIterationsEntity,
+      UtilityCostsEntity,
+      MembersEntity,
+      UsersEntity,
+      MessesEntity,
+    ]),
+  ],
   controllers: [ManagerController],
-  providers: [ManagerService]
+  providers: [ManagerService],
 })
 export class ManagerModule {}

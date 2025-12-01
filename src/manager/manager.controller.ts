@@ -17,6 +17,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { UserRole } from 'src/dtos/role.enum';
 import { mealInsertDTO } from 'src/dtos/meal_insert.dto';
 import { mealExpenseInsertDTO } from 'src/dtos/meal_expense_insert.dto';
+import { utilityCostDTO } from 'src/dtos/utility_cost.dto';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Roles(UserRole.MANAGER)
@@ -81,6 +82,41 @@ export class ManagerController {
       info.amount,
       info.description,
       info.member_id,
+      userID,
+    );
+  }
+
+  @Post('insertUtiltyCosts')
+  @UsePipes(new ValidationPipe())
+  insertUtiltyCosts(@Body() info: utilityCostDTO, @Request() req) {
+    const userID = req.user.userID;
+    return this.managerService.insertUtiltyCosts(
+      info.mess_id,
+      info.rent,
+      info.electricity,
+      info.internet,
+      info.gas,
+      info.maid,
+      userID,
+    );
+  }
+
+  @Put('updateUtilityCosts/:utilityCostID')
+  @UsePipes(new ValidationPipe())
+  updateUtilityCosts(
+    @Param('utilityCostID') utilityCostID: number,
+    @Body() info: utilityCostDTO,
+    @Request() req,
+  ) {
+    const userID = req.user.userID;
+    return this.managerService.updateUtilityCosts(
+      utilityCostID,
+      info.mess_id,
+      info.rent,
+      info.electricity,
+      info.internet,
+      info.gas,
+      info.maid,
       userID,
     );
   }

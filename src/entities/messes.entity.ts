@@ -48,6 +48,6 @@ export class MessesEntity {
   @OneToMany(() => MembersEntity, (member) => member.mess)
   members : MembersEntity[];
 
-  // @OneToMany(() => UtilityCostsEntity, (cost) => cost.mess)
-  // utility_costs : UtilityCostsEntity[];
+  @OneToMany(() => UtilityCostsEntity, (cost) => cost.mess)
+  utility_costs : UtilityCostsEntity[];
 }

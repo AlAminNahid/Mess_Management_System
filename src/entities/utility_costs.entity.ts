@@ -15,11 +15,16 @@ export class UtilityCostsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @ManyToOne(() => MessesEntity, (mess) => mess.utility_costs)
-  // @JoinColumn({
-  //   name : 'mess_id'
-  // })
-  // mess : MessesEntity;
+  @ManyToOne(() => MessesEntity, (mess) => mess.utility_costs)
+  @JoinColumn({
+    name : 'mess_id'
+  })
+  mess : MessesEntity;
+
+  @CreateDateColumn({
+    type : 'timestamp'
+  })
+  date : Timestamp;
 
   @Column({
     type: 'decimal',
