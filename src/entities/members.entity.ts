@@ -7,11 +7,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { MessesEntity } from './messes.entity';
 import { UsersEntity } from './users.entity';
 import { MealExpenseIterationsEntity } from './meal_expense_iterations.entity';
 import { NoticesEntity } from './notices.enitity';
+import { MealsEntity } from './meals.entity';
 
 @Entity('members')
 export class MembersEntity {
@@ -19,10 +21,16 @@ export class MembersEntity {
   id: number;
 
   @ManyToOne(() => MessesEntity, (mess) => mess.id)
-  mess_id : MessesEntity;
+  @JoinColumn({
+    name : 'mess_id'
+  })
+  mess : MessesEntity;
 
-  @OneToMany(() => UsersEntity, (user) => user.id)
-  user_id: UsersEntity[];
+  @ManyToOne(() => UsersEntity, (user) => user.id)
+  @JoinColumn({
+    name : 'user_id'
+  })
+  user: UsersEntity;
 
   @Column({
     type: 'enum',
@@ -33,8 +41,8 @@ export class MembersEntity {
 
   @Column({
     type: 'enum',
-    enum: ['manager', 'member'],
-    default: 'member',
+    enum: ['manager', 'member', 'user'],
+    default: 'user',
   })
   role: string;
 
@@ -44,9 +52,7 @@ export class MembersEntity {
   })
   leave_date: Timestamp;
 
-  @Column({
-    type: 'timestamp',
-  })
+  @CreateDateColumn()
   join_date: Timestamp;
 
   @CreateDateColumn()
@@ -55,9 +61,12 @@ export class MembersEntity {
   @UpdateDateColumn()
   updated_at: Timestamp;
 
-  @OneToMany(() => MealExpenseIterationsEntity, (meal) => meal.member_id)
-  member_id : MealExpenseIterationsEntity[];
+  @OneToMany(() => MealExpenseIterationsEntity, (meal) => meal.member)
+  meal_expense : MealExpenseIterationsEntity[];
 
-  @OneToMany(() => NoticesEntity, (notice) => notice.member_id)
-  member_notice_id : NoticesEntity[];
+  @OneToMany(() => MealsEntity, (meal) => meal.member)
+  meals : MealsEntity[];
+
+  // @OneToMany(() => NoticesEntity, (notice) => notice.member)
+  // notices : NoticesEntity[];
 }

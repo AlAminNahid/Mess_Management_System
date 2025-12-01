@@ -3,6 +3,7 @@ import {
   Controller,
   Patch,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { UsersEntity } from 'src/entities/users.entity';
 import { loginDTO } from 'src/dtos/login.dto';
 import { changePasswordDTO } from 'src/dtos/changePassword.dto';
 import { forgetPasswordDTO } from 'src/dtos/forgetPassword.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -36,6 +38,7 @@ export class AuthController {
   }
 
   @Patch('changePassword')
+  @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
   changePassword(@Body() info: changePasswordDTO): Promise<UsersEntity> {
     return this.authService.changePassword(

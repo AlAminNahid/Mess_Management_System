@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   Timestamp,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { MembersEntity } from './members.entity';
 
@@ -14,11 +15,14 @@ export class MealsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => MembersEntity, (member) => member.user_id)
-  user_id : MembersEntity;
+  @ManyToOne(() => MembersEntity, (member) => member.meals)
+  @JoinColumn({
+    name : 'member_id'
+  })
+  member : MembersEntity;
 
-  @Column({
-    type: 'timestamp',
+  @CreateDateColumn({
+    type : 'timestamp'
   })
   date: Timestamp;
 

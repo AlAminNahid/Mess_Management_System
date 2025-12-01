@@ -5,7 +5,8 @@ import {
   CreateDateColumn,
   ManyToOne,
   Timestamp,
-  UpdateDateColumn
+  UpdateDateColumn,
+  JoinColumn
 } from 'typeorm';
 import { MessesEntity } from './messes.entity';
 
@@ -14,8 +15,11 @@ export class UtilityCostsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => MessesEntity, (mess) => mess.id)
-  mess_id : MessesEntity;
+  // @ManyToOne(() => MessesEntity, (mess) => mess.utility_costs)
+  // @JoinColumn({
+  //   name : 'mess_id'
+  // })
+  // mess : MessesEntity;
 
   @Column({
     type: 'decimal',
@@ -51,6 +55,11 @@ export class UtilityCostsEntity {
     scale: 2,
   })
   gas: number;
+
+  @Column({
+    type: 'int'
+  })
+  manager_id : number;
 
   @CreateDateColumn({
     type: 'timestamp',

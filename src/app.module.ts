@@ -4,6 +4,7 @@ import { dbConnection } from './db.connection';
 import { AuthModule } from './auth/auth.module';
 import { MemberModule } from './member/member.module';
 import { ManagerModule } from './manager/manager.module';
+import { MessModule } from './mess/mess.module';
 
 const db = new dbConnection();
 @Module({
@@ -16,7 +17,7 @@ const db = new dbConnection();
     database : db.database,
     autoLoadEntities : true,
     synchronize : true
-  }), AuthModule, MemberModule, ManagerModule],
+  }), AuthModule, MemberModule, ManagerModule, MessModule],
   controllers: [],
   providers: [],
 })

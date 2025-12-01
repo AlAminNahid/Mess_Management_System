@@ -1,15 +1,10 @@
 import {
   IsNotEmpty,
-  IsOptional,
   IsString,
   MaxLength,
-  IsIn,
-  IsBoolean,
   Matches,
-  MinLength,
-  IsEnum,
+  MinLength
 } from 'class-validator';
-import { UserRole } from 'src/dtos/role.enum';
 
 export class registrationDTO {
   @IsString()
@@ -46,18 +41,6 @@ export class registrationDTO {
       'Password must contain any of this (@ or # or $ or &) speical characters',
   })
   password: string;
-
-  @IsOptional()
-  @IsEnum(UserRole, {
-    message: 'Role must be manager, member or admin',
-  })
-  role: string;
-
-  @IsOptional()
-  @IsBoolean({
-    message: 'is_active must be either true or false',
-  })
-  is_active: boolean;
 
   @IsString()
   @Matches(/^\d{14}$/, {

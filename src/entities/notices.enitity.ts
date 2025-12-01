@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Timestamp,
@@ -31,8 +32,11 @@ export class NoticesEntity {
   })
   posted_date : Timestamp;
 
-  @ManyToOne(() => MembersEntity, (member) => member.user_id)
-  member_id : MembersEntity;
+  // @ManyToOne(() => MembersEntity, (member) => member.notices)
+  // @JoinColumn({
+  //   name : 'member_id'
+  // })
+  // member : MembersEntity;
 
   @Column({
     type : 'enum',

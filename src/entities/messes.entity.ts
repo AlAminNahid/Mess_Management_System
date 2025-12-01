@@ -8,9 +8,8 @@ import {
   OneToOne,
   OneToMany,
 } from 'typeorm';
-import { UsersEntity } from './users.entity';
 import { MembersEntity } from './members.entity';
-import { NoticesEntity } from './notices.enitity';
+import { UtilityCostsEntity } from './utility_costs.entity';
 
 @Entity('messes')
 export class MessesEntity {
@@ -20,6 +19,7 @@ export class MessesEntity {
   @Column({
     type: 'varchar',
     length: 200,
+    unique : true
   })
   name: string;
 
@@ -29,7 +29,9 @@ export class MessesEntity {
   address: string;
 
   @Column({
-    type: 'boolean',
+    type: 'enum',
+    enum : [true, false],
+    default : true
   })
   is_active: boolean;
 
@@ -43,6 +45,9 @@ export class MessesEntity {
   })
   updated_at: Timestamp;
 
-  @OneToMany(() => MembersEntity, (member) => member.mess_id)
-  mess_id : MembersEntity[];
+  @OneToMany(() => MembersEntity, (member) => member.mess)
+  members : MembersEntity[];
+
+  // @OneToMany(() => UtilityCostsEntity, (cost) => cost.mess)
+  // utility_costs : UtilityCostsEntity[];
 }

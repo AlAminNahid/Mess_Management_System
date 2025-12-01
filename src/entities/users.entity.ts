@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -57,6 +58,6 @@ export class UsersEntity {
   @UpdateDateColumn()
   updated_at: string;
 
-  @ManyToOne(() => MembersEntity, (member) => member.user_id)
-  member_id: MembersEntity; 
+  @OneToMany(() => MembersEntity, (member) => member.user)
+  members: MembersEntity[]; 
 }

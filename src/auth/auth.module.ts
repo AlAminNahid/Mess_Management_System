@@ -6,10 +6,11 @@ import { UsersEntity } from 'src/entities/users.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { MembersEntity } from 'src/entities/members.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UsersEntity]),
+    TypeOrmModule.forFeature([UsersEntity, MembersEntity]),
     PassportModule,
     JwtModule.register({
       secret: 'I_AM_ALUBOSS',

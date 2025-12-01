@@ -9,10 +9,4 @@ import { UserRole } from 'src/dtos/role.enum';
 @Controller('member')
 export class MemberController {
     constructor(private readonly memberService : MemberService){}
-
-    @Get('dashboard')
-    @Roles(UserRole.MEMBER)
-    getMemberDashboard() : string {
-        return this.memberService.getMemberDashboard();
-    }
 }

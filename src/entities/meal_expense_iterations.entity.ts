@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   Timestamp,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { MembersEntity } from './members.entity';
 
@@ -14,8 +15,11 @@ export class MealExpenseIterationsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => MembersEntity, (member) => member.user_id)
-  member_id : MembersEntity;
+  @ManyToOne(() => MembersEntity, (member) => member.meal_expense)
+  @JoinColumn({
+    name : 'member_id'
+  })
+  member : MembersEntity;
 
   @Column({
     type: 'decimal',
@@ -24,8 +28,8 @@ export class MealExpenseIterationsEntity {
   })
   amount: number;
 
-  @Column({
-    type: 'timestamp',
+  @CreateDateColumn({
+    type : 'timestamp'
   })
   date: Timestamp;
 
@@ -35,7 +39,7 @@ export class MealExpenseIterationsEntity {
   description: string;
 
   @Column()
-  manager_id : number; // Will get this from the JWT token
+  manager_id : number;
 
   @CreateDateColumn({
     type: 'timestamp',
