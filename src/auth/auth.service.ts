@@ -59,7 +59,7 @@ export class AuthService {
 
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
-      throw new UnauthorizedException('Invalid password');
+      throw new UnauthorizedException('Aunothorized password');
     }
 
     const member = await this.memberRepository.findOne({

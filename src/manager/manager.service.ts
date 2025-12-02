@@ -7,7 +7,7 @@ import { MessesEntity } from 'src/entities/messes.entity';
 import { NoticesEntity } from 'src/entities/notices.enitity';
 import { UsersEntity } from 'src/entities/users.entity';
 import { UtilityCostsEntity } from 'src/entities/utility_costs.entity';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ManagerService {
