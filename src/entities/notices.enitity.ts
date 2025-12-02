@@ -8,7 +8,6 @@ import {
   Timestamp,
   UpdateDateColumn,
 } from 'typeorm';
-import { MessesEntity } from './messes.entity';
 import { MembersEntity } from './members.entity';
 
 @Entity('notices')
@@ -27,16 +26,16 @@ export class NoticesEntity {
   })
   description : string;
 
-  @Column({
+  @CreateDateColumn({
     type : 'timestamp'
   })
   posted_date : Timestamp;
 
-  // @ManyToOne(() => MembersEntity, (member) => member.notices)
-  // @JoinColumn({
-  //   name : 'member_id'
-  // })
-  // member : MembersEntity;
+  @ManyToOne(() => MembersEntity, (member) => member.notices)
+  @JoinColumn({
+    name : 'member_id'
+  })
+  member : MembersEntity;
 
   @Column({
     type : 'enum',

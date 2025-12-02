@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ManagerController } from './manager.controller';
-import { ManagerService } from './manager.service';
+import { MemberController } from './member.controller';
+import { MemberService } from './member.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MealsEntity } from 'src/entities/meals.entity';
 import { MealExpenseIterationsEntity } from 'src/entities/meal_expense_iterations.entity';
@@ -19,10 +19,10 @@ import { NoticesEntity } from 'src/entities/notices.enitity';
       MembersEntity,
       UsersEntity,
       MessesEntity,
-      NoticesEntity
+      NoticesEntity,
     ]),
   ],
-  controllers: [ManagerController],
-  providers: [ManagerService],
+  controllers: [MemberController],
+  providers: [MemberService],
 })
-export class ManagerModule {}
+export class MemberModule {}

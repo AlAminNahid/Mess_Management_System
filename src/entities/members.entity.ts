@@ -67,6 +67,6 @@ export class MembersEntity {
   @OneToMany(() => MealsEntity, (meal) => meal.member)
   meals : MealsEntity[];
 
-  // @OneToMany(() => NoticesEntity, (notice) => notice.member)
-  // notices : NoticesEntity[];
+  @OneToMany(() => NoticesEntity, (notice) => notice.member)
+  notices : NoticesEntity[];
 }

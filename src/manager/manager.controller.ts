@@ -18,6 +18,7 @@ import { UserRole } from 'src/dtos/role.enum';
 import { mealInsertDTO } from 'src/dtos/meal_insert.dto';
 import { mealExpenseInsertDTO } from 'src/dtos/meal_expense_insert.dto';
 import { utilityCostDTO } from 'src/dtos/utility_cost.dto';
+import { NoticeDTO } from 'src/dtos/notice.dto';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Roles(UserRole.MANAGER)
@@ -117,6 +118,18 @@ export class ManagerController {
       info.internet,
       info.gas,
       info.maid,
+      userID,
+    );
+  }
+
+  @Post('sendNotice')
+  @UsePipes(new ValidationPipe())
+  sendNotice(@Body() info: NoticeDTO, @Request() req) {
+    const userID = req.user.userID;
+    return this.managerService.sendNotice(
+      info.title,
+      info.description,
+      info.notice_type,
       userID,
     );
   }

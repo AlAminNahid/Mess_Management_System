@@ -2,10 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dbConnection } from './db.connection';
 import { AuthModule } from './auth/auth.module';
-import { MemberModule } from './member/member.module';
 import { ManagerModule } from './manager/manager.module';
 import { MessModule } from './mess/mess.module';
-import { CommonModule } from './common/common.module';
+import { MemberModule } from './member/member.module';
 
 const db = new dbConnection();
 @Module({
@@ -18,7 +17,7 @@ const db = new dbConnection();
     database : db.database,
     autoLoadEntities : true,
     synchronize : true
-  }), AuthModule, MemberModule, ManagerModule, MessModule, CommonModule],
+  }), AuthModule, ManagerModule, MessModule, MemberModule],
   controllers: [],
   providers: [],
 })
