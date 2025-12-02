@@ -7,7 +7,7 @@ import { MessesEntity } from 'src/entities/messes.entity';
 import { NoticesEntity } from 'src/entities/notices.enitity';
 import { UsersEntity } from 'src/entities/users.entity';
 import { UtilityCostsEntity } from 'src/entities/utility_costs.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 
 @Injectable()
 export class ManagerService {
@@ -348,8 +348,7 @@ export class ManagerService {
         description: true,
         notice_type: true,
         posted_date: true,
-        member: { id: true,mess: { name: true, address: true }},
-        
+        member: { id: true, mess: { name: true, address: true } },
       },
       relations: {
         member: {
@@ -366,6 +365,65 @@ export class ManagerService {
     return {
       message: 'All the notices',
       notices,
+    };
+  }
+
+  async deactivateMember(memberID: number, userID: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userID },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const member = await this.memberRepository.findOne({
+      where: { id: memberID },
+    });
+    if (!member) {
+      throw new NotFoundException('Member not found');
+    }
+
+    member.is_active = false;
+    await this.memberRepository.save(member);
+
+    return {
+      message: 'Member deactivated successfully',
+      member_id: member.id,
+      is_active_status: member.is_active,
+      manager_name: user.name,
+    };
+  }
+
+  async deactivateMess(messID: number, userID: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userID },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const mess = await this.messRepository.findOne({
+      where: { id: messID },
+    });
+    if (!mess) {
+      throw new NotFoundException('Mess not found');
+    }
+
+    mess.is_active = false;
+    await this.messRepository.save(mess);
+
+    await this.memberRepository
+      .createQueryBuilder()
+      .update()
+      .set({ is_active: false })
+      .where('messId = :messID', { messID })
+      .execute();
+
+    return {
+      message: 'Mess and all members deactivated successfully',
+      mess_id: mess.id,
+      mess_name: mess.name,
+      manager: user.name,
     };
   }
 }

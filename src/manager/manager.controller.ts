@@ -9,6 +9,7 @@ import {
   Request,
   Put,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -141,5 +142,23 @@ export class ManagerController {
   ) {
     const userID = req.user.userID;
     return this.managerService.getNotices(messID, userID);
+  }
+
+  @Patch('deactivate/member/:memberID')
+  deactivateMember(
+    @Param('memberID') memberID : number,
+    @Request() req
+  ) {
+    const userID = req.user.userID;
+    return this.managerService.deactivateMember(memberID, userID);
+  }
+
+  @Patch('deactivate/mess/:messID')
+  deactivateMess(
+    @Param('messID') messID : number,
+    @Request() req
+  ) {
+    const userID = req.user.userID;
+    return this.managerService.deactivateMess(messID, userID);
   }
 }

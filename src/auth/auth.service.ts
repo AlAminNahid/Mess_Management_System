@@ -76,7 +76,7 @@ export class AuthService {
     };
     const token = await this.jwtService.signAsync(payload);
 
-    if (!member) {
+    if (!member || member.is_active === false) {
       return {
         access_token: token,
         message:
