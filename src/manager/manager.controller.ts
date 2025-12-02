@@ -133,4 +133,13 @@ export class ManagerController {
       userID,
     );
   }
+
+  @Get('getNotices/:messID')
+  getNotices(
+    @Param('messID') messID : number,
+    @Request() req
+  ) {
+    const userID = req.user.userID;
+    return this.managerService.getNotices(messID, userID);
+  }
 }

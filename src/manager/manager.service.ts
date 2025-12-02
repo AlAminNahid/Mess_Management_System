@@ -25,7 +25,7 @@ export class ManagerService {
     @InjectRepository(MessesEntity)
     private messRepository: Repository<MessesEntity>,
     @InjectRepository(NoticesEntity)
-    private noticeRepository: Repository<NoticesEntity>
+    private noticeRepository: Repository<NoticesEntity>,
   ) {}
 
   getManagerDashboard(): string {
@@ -288,37 +288,84 @@ export class ManagerService {
     };
   }
 
-  async sendNotice(title: string, description: string, notice_type: string, userID: number){
+  async sendNotice(
+    title: string,
+    description: string,
+    notice_type: string,
+    userID: number,
+  ) {
     const user = await this.userRepository.findOne({
-      where : {id : userID}
+      where: { id: userID },
     });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
     const member = await this.memberRepository.findOne({
-      where : {user : {id : userID}}
+      where: { user: { id: userID } },
     });
-    if(!member) {
+    if (!member) {
       throw new NotFoundException('Member not found');
     }
 
     const notice = await this.noticeRepository.create({
-      title : title,
-      description : description,
-      notice_type : notice_type,
-      member : member
-    })
+      title: title,
+      description: description,
+      notice_type: notice_type,
+      member: member,
+    });
 
     await this.noticeRepository.save(notice);
 
     return {
-      message : 'Notice is sended successfully',
-      'title' : notice.title,
-      'description' : notice.description,
-      'date' : notice.posted_date,
-      'notice_type' : notice.notice_type,
-      'sended_by' : user.name
+      message: 'Notice is sended successfully',
+      title: notice.title,
+      description: notice.description,
+      date: notice.posted_date,
+      notice_type: notice.notice_type,
+      sended_by: user.name,
+    };
+  }
+
+  async getNotices(messID: number, userID: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userID },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
+
+    const mess = await this.messRepository.findOne({
+      where: { id: messID },
+    });
+    if (!mess) {
+      throw new NotFoundException('Mess not found');
+    }
+
+    const notices = await this.noticeRepository.find({
+      select: {
+        title: true,
+        description: true,
+        notice_type: true,
+        posted_date: true,
+        member: { id: true,mess: { name: true, address: true }},
+        
+      },
+      relations: {
+        member: {
+          mess: true,
+        },
+      },
+      where: {
+        member: {
+          mess: { id: messID },
+        },
+      },
+    });
+
+    return {
+      message: 'All the notices',
+      notices,
+    };
   }
 }
