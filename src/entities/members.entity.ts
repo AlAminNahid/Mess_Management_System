@@ -26,11 +26,11 @@ export class MembersEntity {
   })
   mess : MessesEntity;
 
-  @ManyToOne(() => UsersEntity, (user) => user.id)
+  @OneToMany(() => UsersEntity, (user) => user.id)
   @JoinColumn({
     name : 'user_id'
   })
-  user: UsersEntity;
+  user: UsersEntity[];
 
   @Column({
     type: 'enum',

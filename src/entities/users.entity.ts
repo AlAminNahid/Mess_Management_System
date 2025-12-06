@@ -58,6 +58,6 @@ export class UsersEntity {
   @UpdateDateColumn()
   updated_at: string;
 
-  @OneToMany(() => MembersEntity, (member) => member.user)
-  members: MembersEntity[]; 
+  @ManyToOne(() => MembersEntity, (member) => member.user)
+  members: MembersEntity; 
 }
