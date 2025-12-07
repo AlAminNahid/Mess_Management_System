@@ -56,4 +56,4 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Private Source Files
-src/db.connection.ts
+src/data-source.ts

@@ -14,6 +14,7 @@ import { UsersEntity } from './users.entity';
 import { MealExpenseIterationsEntity } from './meal_expense_iterations.entity';
 import { NoticesEntity } from './notices.enitity';
 import { MealsEntity } from './meals.entity';
+import { UserRole } from 'src/dtos/role.enum';
 
 @Entity('members')
 export class MembersEntity {
@@ -41,8 +42,8 @@ export class MembersEntity {
 
   @Column({
     type: 'enum',
-    enum: ['manager', 'member', 'user'],
-    default: 'user',
+    enum: UserRole,
+    default: UserRole.USER,
   })
   role: string;
 

@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { MembersEntity } from './members.entity';
+import { NoticeType } from 'src/dtos/notice_type.enum';
 
 @Entity('notices')
 export class NoticesEntity {
@@ -39,7 +40,7 @@ export class NoticesEntity {
 
   @Column({
     type : 'enum',
-    enum : ['annoucement', 'shopping_request']
+    enum : NoticeType
   })
   notice_type : string;
 

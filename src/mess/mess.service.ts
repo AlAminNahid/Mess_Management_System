@@ -43,7 +43,7 @@ export class MessService {
 
     const memberInfo = await this.memberRepository.create({
       mess: messInfo,
-      user: userInfo,
+      user: [userInfo],
       role: 'manager',
     });
     await this.memberRepository.save(memberInfo);
@@ -96,7 +96,7 @@ export class MessService {
 
     const member = await this.memberRepository.create({
       mess: mess_info,
-      user: user_info,
+      user: [user_info],
       role: 'member',
     });
 

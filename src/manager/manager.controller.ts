@@ -13,30 +13,35 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { ManagerService } from './manager.service';
 import { Roles } from 'src/auth/roles.decorator';
 import { UserRole } from 'src/dtos/role.enum';
 import { mealInsertDTO } from 'src/dtos/meal_insert.dto';
 import { mealExpenseInsertDTO } from 'src/dtos/meal_expense_insert.dto';
 import { utilityCostDTO } from 'src/dtos/utility_cost.dto';
 import { NoticeDTO } from 'src/dtos/notice.dto';
+import { MealsService } from './services/meals.service';
+import { MealExpenseService } from './services/meal-expense.service';
+import { UtilityCostService } from './services/utility-cost.service';
+import { NoticesService } from './services/notices.service';
+import { MessService } from 'src/manager/services/mess.service';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Roles(UserRole.MANAGER)
 @Controller('manager')
 export class ManagerController {
-  constructor(private readonly managerService: ManagerService) {}
-
-  @Get('dashboard')
-  getManagerDashboard(): string {
-    return this.managerService.getManagerDashboard();
-  }
+  constructor(
+    private readonly mealService: MealsService,
+    private readonly mealExpenseService: MealExpenseService,
+    private readonly utilityCostService: UtilityCostService,
+    private readonly noticesService: NoticesService,
+    private readonly messService: MessService
+  ) {}
 
   @Post('insertMeals')
   @UsePipes(new ValidationPipe())
   insertMeals(@Body() info: mealInsertDTO, @Request() req) {
     const userID = req.user.userID;
-    return this.managerService.insertMeals(
+    return this.mealService.insertMeals(
       info.meal_count,
       info.member_id,
       userID,
@@ -51,7 +56,7 @@ export class ManagerController {
     @Request() req,
   ) {
     const userID = req.user.userID;
-    return this.managerService.updateMeals(
+    return this.mealService.updateMeals(
       mealID,
       info.meal_count,
       info.member_id,
@@ -63,7 +68,7 @@ export class ManagerController {
   @UsePipes(new ValidationPipe())
   insertMealExpenses(@Body() info: mealExpenseInsertDTO, @Request() req) {
     const userID = req.user.userID;
-    return this.managerService.insertMealExpenses(
+    return this.mealExpenseService.insertMealExpenses(
       info.amount,
       info.description,
       info.member_id,
@@ -79,7 +84,7 @@ export class ManagerController {
     @Request() req,
   ) {
     const userID = req.user.userID;
-    return this.managerService.updateMealExpenses(
+    return this.mealExpenseService.updateMealExpenses(
       mealExpensID,
       info.amount,
       info.description,
@@ -92,7 +97,7 @@ export class ManagerController {
   @UsePipes(new ValidationPipe())
   insertUtiltyCosts(@Body() info: utilityCostDTO, @Request() req) {
     const userID = req.user.userID;
-    return this.managerService.insertUtiltyCosts(
+    return this.utilityCostService.insertUtiltyCosts(
       info.mess_id,
       info.rent,
       info.electricity,
@@ -111,7 +116,7 @@ export class ManagerController {
     @Request() req,
   ) {
     const userID = req.user.userID;
-    return this.managerService.updateUtilityCosts(
+    return this.utilityCostService.updateUtilityCosts(
       utilityCostID,
       info.mess_id,
       info.rent,
@@ -127,7 +132,7 @@ export class ManagerController {
   @UsePipes(new ValidationPipe())
   sendNotice(@Body() info: NoticeDTO, @Request() req) {
     const userID = req.user.userID;
-    return this.managerService.sendNotice(
+    return this.noticesService.sendNotice(
       info.title,
       info.description,
       info.notice_type,
@@ -136,29 +141,20 @@ export class ManagerController {
   }
 
   @Get('getNotices/:messID')
-  getNotices(
-    @Param('messID') messID : number,
-    @Request() req
-  ) {
+  getNotices(@Param('messID') messID: number, @Request() req) {
     const userID = req.user.userID;
-    return this.managerService.getNotices(messID, userID);
+    return this.noticesService.getNotices(messID, userID);
   }
 
   @Patch('deactivate/member/:memberID')
-  deactivateMember(
-    @Param('memberID') memberID : number,
-    @Request() req
-  ) {
+  deactivateMember(@Param('memberID') memberID: number, @Request() req) {
     const userID = req.user.userID;
-    return this.managerService.deactivateMember(memberID, userID);
+    return this.messService.deactivateMember(memberID, userID);
   }
 
   @Patch('deactivate/mess/:messID')
-  deactivateMess(
-    @Param('messID') messID : number,
-    @Request() req
-  ) {
+  deactivateMess(@Param('messID') messID: number, @Request() req) {
     const userID = req.user.userID;
-    return this.managerService.deactivateMess(messID, userID);
+    return this.messService.deactivateMess(messID, userID);
   }
 }
