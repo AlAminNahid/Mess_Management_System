@@ -27,7 +27,8 @@ The application architecture is centered around a relational database designed t
 
 
 
-![Mess Management System ER Diagram](<img width="1399" height="823" alt="Image" src="https://github.com/user-attachments/assets/e8acb69d-3163-4596-9840-8f06676955f9" />)
+### Mess Management System ER Diagram
+<img width="1399" height="823" alt="Image" src="https://github.com/user-attachments/assets/e8acb69d-3163-4596-9840-8f06676955f9" />
 
 
 ### Key Components:
