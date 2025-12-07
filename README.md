@@ -1,98 +1,41 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Mess Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Introduction
+[cite_start]This Mess Management System is specifically designed for bachelors who want to track their daily meal systems efficiently[cite: 8]. [cite_start]The system manages members, daily meals, shared utility costs, and mess communication through two distinct user roles: **Manager** and **Member**[cite: 3].
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## User Onboarding & Mess Creation
+[cite_start]When a user logs in, the system checks if they are currently a member of any mess[cite: 4].
+* [cite_start]**If the user is not a member:** They are presented with options to either "Create a Mess" or "Join a Mess"[cite: 5].
+* [cite_start]**Create a Mess:** The user provides mess information and is automatically registered as the **Manager** in the system[cite: 6].
+* [cite_start]**Join a Mess:** The user provides a `mess_id` to join an existing group and is registered as a **Member**[cite: 7].
 
-## Description
+## User Roles & Capabilities
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Manager Capabilities
+The Manager has administrative control over the financial and logistics tracking of the mess:
+* [cite_start]**Meal Tracking:** Can record and update member meal counts (POST/PUT)[cite: 12, 13].
+* [cite_start]**Expense Management:** Can insert and update meal-related expenses for users (POST/PUT)[cite: 14, 15].
+* [cite_start]**Utility Costs:** Can manage monthly shared costs such as rent, internet, gas, and electricity (POST/PUT)[cite: 16, 17].
+* [cite_start]**Announcements:** Can send mess-wide notices and view all past notices for their mess[cite: 18, 20].
 
-## Project setup
+### Member Capabilities
+Members participate in the mess and can contribute to logistics:
+* [cite_start]**Shopping Requests:** Members can send notices to the mess, such as shopping requests for specific food items (POST)[cite: 22, 23].
 
-```bash
-$ npm install
-```
+## Database Architecture
+The system relies on a relational database to maintain data integrity across meals, costs, and memberships.
 
-## Compile and run the project
+### ER Diagram
+The following diagram illustrates the relationships between users, mess entities, meals, and notice boards.
 
-```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+### Core Tables:
+* [cite_start]**Users:** Stores authentication and profile data[cite: 9].
+* [cite_start]**Messes:** Stores name, address, and status of the mess groups[cite: 9].
+* [cite_start]**Members:** Tracks the relationship between users and messes, including roles[cite: 9].
+* [cite_start]**Meals & Expenses:** Logs daily counts and monetary contributions[cite: 9].
+* [cite_start]**Utility Costs:** Records shared house expenses managed by the manager[cite: 9].
+* [cite_start]**Notices:** Stores communication logs between managers and members[cite: 9].
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
