@@ -1,41 +1,42 @@
-# Mess Management System
+# 🍲 Mess Management System
 
-## Introduction
-[cite_start]This Mess Management System is specifically designed for bachelors who want to track their daily meal systems efficiently[cite: 8]. [cite_start]The system manages members, daily meals, shared utility costs, and mess communication through two distinct user roles: **Manager** and **Member**[cite: 3].
+## 📌 Introduction
+The **Mess Management System** is a dedicated platform designed for bachelors to streamline the management of shared meal systems. It automates the tracking of daily meals, shared expenses, and communal utility costs.
 
-## User Onboarding & Mess Creation
-[cite_start]When a user logs in, the system checks if they are currently a member of any mess[cite: 4].
-* [cite_start]**If the user is not a member:** They are presented with options to either "Create a Mess" or "Join a Mess"[cite: 5].
-* [cite_start]**Create a Mess:** The user provides mess information and is automatically registered as the **Manager** in the system[cite: 6].
-* [cite_start]**Join a Mess:** The user provides a `mess_id` to join an existing group and is registered as a **Member**[cite: 7].
+## 🚀 Workflow: Onboarding & Logic
+When a user logs into the system, the following logic applies:
+* **Membership Check**: The system verifies if the user is already part of a mess.
+* **New Users**: If not a member, the user can either **Create a Mess** or **Join a Mess**.
+* **Creating a Mess**: The user provides mess information and is automatically assigned the role of **Manager**.
+* **Joining a Mess**: The user enters a `mess_id` to join an existing setup as a **Member**.
 
-## User Roles & Capabilities
+## 👥 User Roles & Permissions
+The system maintains a clear distinction between the Manager (administrative) and Member roles to ensure financial transparency.
 
-### Manager Capabilities
-The Manager has administrative control over the financial and logistics tracking of the mess:
-* [cite_start]**Meal Tracking:** Can record and update member meal counts (POST/PUT)[cite: 12, 13].
-* [cite_start]**Expense Management:** Can insert and update meal-related expenses for users (POST/PUT)[cite: 14, 15].
-* [cite_start]**Utility Costs:** Can manage monthly shared costs such as rent, internet, gas, and electricity (POST/PUT)[cite: 16, 17].
-* [cite_start]**Announcements:** Can send mess-wide notices and view all past notices for their mess[cite: 18, 20].
+| Feature | Manager 👑 | Member 👤 | Method |
+| :--- | :---: | :---: | :---: |
+| Insert/Update Meals | ✅ | ❌ | POST/PUT |
+| Manage Meal Expenses | ✅ | ❌ | POST/PUT |
+| Manage Utility Costs | ✅ | ❌ | POST/PUT |
+| Post Announcements | ✅ | ❌ | POST |
+| Post Shopping Requests | ✅ | ✅ | POST |
+| View All Mess Notices | ✅ | ✅ | GET |
 
-### Member Capabilities
-Members participate in the mess and can contribute to logistics:
-* [cite_start]**Shopping Requests:** Members can send notices to the mess, such as shopping requests for specific food items (POST)[cite: 22, 23].
-
-## Database Architecture
-The system relies on a relational database to maintain data integrity across meals, costs, and memberships.
-
-### ER Diagram
-The following diagram illustrates the relationships between users, mess entities, meals, and notice boards.
+## 📊 Database Architecture
+The application architecture is centered around a relational database designed to track complex shared finances.
 
 
 
-### Core Tables:
-* [cite_start]**Users:** Stores authentication and profile data[cite: 9].
-* [cite_start]**Messes:** Stores name, address, and status of the mess groups[cite: 9].
-* [cite_start]**Members:** Tracks the relationship between users and messes, including roles[cite: 9].
-* [cite_start]**Meals & Expenses:** Logs daily counts and monetary contributions[cite: 9].
-* [cite_start]**Utility Costs:** Records shared house expenses managed by the manager[cite: 9].
-* [cite_start]**Notices:** Stores communication logs between managers and members[cite: 9].
+![Mess Management System ER Diagram](<img width="1399" height="823" alt="Image" src="https://github.com/user-attachments/assets/e8acb69d-3163-4596-9840-8f06676955f9" />)
 
----
+
+### Key Components:
+* **Users & Members**: Links individual profiles to mess groups and roles.
+* **Meals & Expenses**: Tracks individual meal counts and dietary spending.
+* **Utility Costs**: Dedicated tracking for rent, internet, electricity, maid, and gas.
+* **Notices**: Acts as a communication hub for mess-wide announcements and shopping requests.
+
+## 🛠 API Implementation Details
+* **Meals**: Use `POST` to record daily entries and `PUT` for corrections.
+* **Finances**: Utilities and individual expenses are managed via `POST` and `PUT` requests.
+* **Notices**: Managers and Members use `POST` for notices, while the Manager uses `GET` to audit all records.
