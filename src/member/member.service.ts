@@ -1,12 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MealExpenseIterationsEntity } from 'src/entities/meal_expense_iterations.entity';
-import { MealsEntity } from 'src/entities/meals.entity';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { NoticesEntity } from 'src/entities/notices.enitity';
 import { UsersEntity } from 'src/entities/users.entity';
-import { UtilityCostsEntity } from 'src/entities/utility_costs.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -16,21 +17,11 @@ export class MemberService {
     private memberRepository: Repository<MembersEntity>,
     @InjectRepository(UsersEntity)
     private userRepository: Repository<UsersEntity>,
-    @InjectRepository(MealsEntity)
-    private mealRepository: Repository<MealsEntity>,
-    @InjectRepository(MealExpenseIterationsEntity)
-    private mealExpenseRepositor: Repository<MealExpenseIterationsEntity>,
-    @InjectRepository(UtilityCostsEntity)
-    private utilityCostsRepository: Repository<UtilityCostsEntity>,
     @InjectRepository(MessesEntity)
     private messRepository: Repository<MessesEntity>,
     @InjectRepository(NoticesEntity)
     private noticeRepository: Repository<NoticesEntity>,
   ) {}
-
-  getMemberDashboard(): string {
-    return 'Welcome to the dashboard member';
-  }
 
   async sendNotice(
     title: string,
@@ -71,5 +62,35 @@ export class MemberService {
     };
   }
 
-  
+  async getNotices(messID: number, userID: number) {
+    const validate_mess = await this.messRepository.findOne({
+      where: { id: messID },
+    });
+    if (!validate_mess) {
+      throw new NotFoundException('There is no existing Mess with this ID');
+    }
+
+    const validate_user = await this.memberRepository.findOne({
+      where: { user: { id: userID }, mess: { id: messID } },
+    });
+    if (!validate_user) {
+      throw new BadRequestException('The user is not a member of this mess');
+    }
+
+    const notices = await this.noticeRepository.find({
+      select: {
+        title: true,
+        description: true,
+        notice_type: true,
+        posted_date: true,
+        member: { id: true, mess: { name: true, address: true } },
+      },
+      where: {member: {mess: {id: messID}}}
+    });
+
+    return {
+      message: 'All the notices',
+      notices,
+    };
+  }
 }

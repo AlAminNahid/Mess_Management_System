@@ -1,36 +1,37 @@
 import {
+  Body,
   Controller,
-  UseGuards,
-  Get,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
-  Body,
   Request,
   Param,
+  Get
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { UserRole } from 'src/dtos/auth/role.enum';
-import { MemberService } from './member.service';
+import { NoticesService } from '../services/notices.service';
 import { NoticeDTO } from 'src/dtos/notice.dto';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles(UserRole.MEMBER)
-@Controller('member')
-export class MemberController {
-  constructor(private readonly memberService: MemberService) {}
+@Roles(UserRole.MANAGER)
+@Controller()
+export class NoticesController {
+  constructor(
+    private readonly noticesService: NoticesService
+  ) {}
 
   @Post('sendNotice')
   @UsePipes(new ValidationPipe())
   sendNotice(@Body() info: NoticeDTO, @Request() req) {
     const userID = req.user.userID;
-    const notice_type = 'shopping_request';
-    return this.memberService.sendNotice(
+    return this.noticesService.sendNotice(
       info.title,
       info.description,
-      notice_type,
+      info.notice_type,
       userID,
     );
   }
@@ -38,6 +39,6 @@ export class MemberController {
   @Get('getNotices/:messID')
   getNotices(@Param('messID') messID: number, @Request() req) {
     const userID = req.user.userID;
-    return this.memberService.getNotices(messID, userID);
+    return this.noticesService.getNotices(messID, userID);
   }
 }

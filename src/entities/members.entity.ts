@@ -14,7 +14,7 @@ import { UsersEntity } from './users.entity';
 import { MealExpenseIterationsEntity } from './meal_expense_iterations.entity';
 import { NoticesEntity } from './notices.enitity';
 import { MealsEntity } from './meals.entity';
-import { UserRole } from 'src/dtos/role.enum';
+import { UserRole } from 'src/dtos/auth/role.enum';
 
 @Entity('members')
 export class MembersEntity {

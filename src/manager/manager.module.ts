@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ManagerController } from './manager.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MealsEntity } from 'src/entities/meals.entity';
 import { MealExpenseIterationsEntity } from 'src/entities/meal_expense_iterations.entity';
@@ -13,6 +12,10 @@ import { MealExpenseService } from './services/meal-expense.service';
 import { MessService } from './services/mess.service';
 import { NoticesService } from './services/notices.service';
 import { UtilityCostService } from './services/utility-cost.service';
+import { MealExpenseController } from './controller/meal_expenses.controller';
+import { MealsController } from './controller/meals.controller';
+import { NoticesController } from './controller/notices.controller';
+import { UtilityCostController } from './controller/utility_cost.controller';
 
 @Module({
   imports: [
@@ -23,10 +26,21 @@ import { UtilityCostService } from './services/utility-cost.service';
       MembersEntity,
       UsersEntity,
       MessesEntity,
-      NoticesEntity
+      NoticesEntity,
     ]),
   ],
-  controllers: [ManagerController],
-  providers: [MealsService, MealExpenseService, MessService, NoticesService, UtilityCostService],
+  controllers: [
+    MealExpenseController,
+    MealsController,
+    NoticesController,
+    UtilityCostController,
+  ],
+  providers: [
+    MealsService,
+    MealExpenseService,
+    MessService,
+    NoticesService,
+    UtilityCostService,
+  ],
 })
 export class ManagerModule {}

@@ -10,9 +10,9 @@ import {
 import { AuthService } from './auth.service';
 import { registrationDTO } from 'src/dtos/registration.dto';
 import { UsersEntity } from 'src/entities/users.entity';
-import { loginDTO } from 'src/dtos/login.dto';
-import { changePasswordDTO } from 'src/dtos/changePassword.dto';
-import { forgetPasswordDTO } from 'src/dtos/forgetPassword.dto';
+import { loginDTO } from 'src/dtos/auth/login.dto';
+import { changePasswordDTO } from 'src/dtos/auth/changePassword.dto';
+import { forgetPasswordDTO } from 'src/dtos/auth/forgetPassword.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
@@ -37,7 +37,7 @@ export class AuthController {
     return this.authService.login(info.email, info.password);
   }
 
-  @Patch('changePassword')
+  @Patch('change-password')
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
   changePassword(@Body() info: changePasswordDTO): Promise<UsersEntity> {
@@ -48,7 +48,7 @@ export class AuthController {
     );
   }
 
-  @Patch('forgetPassword')
+  @Patch('forget-password')
   @UsePipes(new ValidationPipe())
   forgetPassword(@Body() info: forgetPasswordDTO): Promise<UsersEntity> {
     return this.authService.forgetPassword(

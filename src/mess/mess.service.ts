@@ -11,6 +11,12 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class MessService {
+  deactivateMess(messID: number, userID: any) {
+    throw new Error('Method not implemented.');
+  }
+  deactivateMember(memberID: number, userID: any) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectRepository(UsersEntity)
     private usersRepository: Repository<UsersEntity>,

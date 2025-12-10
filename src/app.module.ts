@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ManagerModule } from './manager/manager.module';
 import { MessModule } from './mess/mess.module';
 import { MemberModule } from './member/member.module';
+import { SharedModule } from './shared/shared.module';
 
 const db = new DataSource();
 @Module({
@@ -23,6 +24,7 @@ const db = new DataSource();
     ManagerModule,
     MessModule,
     MemberModule,
+    SharedModule,
   ],
   controllers: [],
   providers: [],
