@@ -2,9 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -58,6 +56,6 @@ export class UsersEntity {
   @UpdateDateColumn()
   updated_at: string;
 
-  @ManyToOne(() => MembersEntity, (member) => member.user)
-  members: MembersEntity; 
+  @OneToMany(() => MembersEntity, (member) => member.user)
+  members: MembersEntity[]; 
 }

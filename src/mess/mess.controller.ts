@@ -31,16 +31,4 @@ export class MessController {
     const userID = req.user.userID;
     return this.messService.joinMess(messID, userID);
   }
-
-  @Patch('deactivate/member/:memberID')
-  deactivateMember(@Param('memberID') memberID: number, @Request() req) {
-    const userID = req.user.userID;
-    return this.messService.deactivateMember(memberID, userID);
-  }
-
-  @Patch('deactivate/mess/:messID')
-  deactivateMess(@Param('messID') messID: number, @Request() req) {
-    const userID = req.user.userID;
-    return this.messService.deactivateMess(messID, userID);
-  }
 }

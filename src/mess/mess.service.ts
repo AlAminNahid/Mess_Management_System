@@ -11,12 +11,6 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class MessService {
-  deactivateMess(messID: number, userID: any) {
-    throw new Error('Method not implemented.');
-  }
-  deactivateMember(memberID: number, userID: any) {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(UsersEntity)
     private usersRepository: Repository<UsersEntity>,
@@ -49,7 +43,7 @@ export class MessService {
 
     const memberInfo = await this.memberRepository.create({
       mess: messInfo,
-      user: [userInfo],
+      user: userInfo,
       role: 'manager',
     });
     await this.memberRepository.save(memberInfo);
@@ -102,7 +96,7 @@ export class MessService {
 
     const member = await this.memberRepository.create({
       mess: mess_info,
-      user: [user_info],
+      user: user_info,
       role: 'member',
     });
 
