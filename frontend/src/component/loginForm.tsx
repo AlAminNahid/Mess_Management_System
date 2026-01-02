@@ -39,32 +39,42 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">Email : </label>
+    <div className="flex min-h-screen w-full items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="fieldset bg-base-200 border-base-300 rounded-box w-full max-w-md border p-8 shadow-xl"
+      >
+        <h2 className="text-center text-3xl font-bold mb-4">Login</h2>
+
+        <label htmlFor="email" className="label font-bold">
+          Email :
+        </label>
         <input
           type="email"
           id="email"
-          name="email"
+          className="input input-bordered w-full" /* Added border & width */
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-      </div>
-      <br />
 
-      <div>
-        <label htmlFor="password">Password : </label>
+        <label htmlFor="password" className="label mt-4 font-bold">
+          Password :
+        </label>
         <input
           type="password"
-          name="password"
           id="password"
+          className="input input-bordered w-full" /* Added border & width */
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-      </div>
-      <br />
 
-      <button type="submit">Login</button>
-    </form>
+        {/* Display the error message if it exists */}
+        {error && <p className="text-error text-sm mt-2">{error}</p>}
+
+        <button className="btn btn-neutral mt-6 w-full" type="submit">
+          Login
+        </button>
+      </form>
+    </div>
   );
 }

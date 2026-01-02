@@ -77,69 +77,80 @@ export default function RegistrationForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name: </label>
+      <div className="flex min-h-screen w-full items-center justify-center">
+        <form
+          onSubmit={handleSubmit}
+          className="fieldset bg-base-200 border-base-300 rounded-box w-full max-w-md border p-8 shadow-xl"
+        >
+          <h2 className="text-center text-3xl font-bold mb-4">Register</h2>
+
+          <label htmlFor="name" className="label font-bold">
+            Name:
+          </label>
           <input
             type="text"
             id="name"
             name="name"
+            className="input input-bordered w-full"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-        </div>
-        <br />
 
-        <div>
-          <label htmlFor="email">Email: </label>
+          <label htmlFor="email" className="label font-bold">
+            Email:
+          </label>
           <input
             type="email"
             id="email"
             name="email"
+            className="input input-bordered w-full"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </div>
-        <br />
 
-        <div>
-          <label htmlFor="password">Password: </label>
+          <label htmlFor="password" className="label font-bold">
+            Password:
+          </label>
           <input
             type="password"
             id="password"
             name="password"
+            className="input input-bordered w-full"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </div>
-        <br />
 
-        <div>
-          <label htmlFor="nid">NID: </label>
+          <label htmlFor="nid" className="label font-bold">
+            NID:
+          </label>
           <input
             type="text"
             id="nid"
             name="nid"
+            className="input input-bordered w-full"
             value={nid}
             onChange={(e) => setNid(e.target.value)}
           />
-        </div>
-        <br />
 
-        <div>
-          <label htmlFor="phone">Phone Number: </label>
+          <label htmlFor="phone" className="label font-bold">
+            Phone Number:
+          </label>
           <input
             type="text"
             name="phone"
             id="phone"
+            className="input input-bordered w-full"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
-        </div>
-        <br />
 
-        <button type="submit">Submit</button>
-      </form>
+          {error && <p className="text-error text-sm mt-2">{error}</p>}
+
+          <button className="btn btn-neutral mt-6 w-full" type="submit">
+            Submit
+          </button>
+        </form>
+      </div>
     </>
   );
 }
