@@ -68,9 +68,6 @@ export default function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        {/* Display the error message if it exists */}
-        {error && <p className="text-error text-sm mt-2">{error}</p>}
-
         <button className="btn btn-neutral mt-6 w-full" type="submit">
           Login
         </button>

@@ -1,6 +1,7 @@
 "use client";
 import { FormEvent, useState } from "react";
 import * as z from "zod";
+import { createUser } from "@/services/user.registration";
 
 const registerSchema = z.object({
   name: z
@@ -48,7 +49,7 @@ export default function RegistrationForm() {
   const [phone, setPhone] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const result = registerSchema.safeParse({
@@ -60,19 +61,24 @@ export default function RegistrationForm() {
     });
 
     if (!result.success) {
-      setError(result.error.message);
-      alert(`The error is ${result.error}`);
+      setError(result.error.issues[0].message);
       return;
     }
 
-    alert(
-      `The input Name: ${result.data.name}, Email: ${result.data.email}, Password: ${result.data.password}, Phone: ${result.data.phone}`
-    );
-    setName("");
-    setEmail("");
-    setPassword("");
-    setNid("");
-    setPhone("");
+    try {
+      const response = await createUser(result.data);
+      alert("User registered successfully");
+      console.log(response);
+
+      setName("");
+      setEmail("");
+      setPassword("");
+      setNid("");
+      setPhone("");
+    } catch (err) {
+      console.error(err);
+      alert("Registration failed");
+    }
   };
 
   return (
@@ -144,7 +150,7 @@ export default function RegistrationForm() {
             onChange={(e) => setPhone(e.target.value)}
           />
 
-          {error && <p className="text-error text-sm mt-2">{error}</p>}
+          {error && <p>{error}</p>}
 
           <button className="btn btn-neutral mt-6 w-full" type="submit">
             Submit
