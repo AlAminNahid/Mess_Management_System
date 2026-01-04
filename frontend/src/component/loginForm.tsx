@@ -19,14 +19,13 @@ export default function LoginForm() {
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     const result = loginSchema.safeParse({ email, password });
 
     if (!result.success) {
-      setError(result.error.message);
-      alert(`The error is ${result.error}`);
+      setError(result.error.issues[0].message);
       return;
     }
 
@@ -67,6 +66,8 @@ export default function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        {error && <p>{error}</p>}
 
         <button className="btn btn-neutral mt-6 w-full" type="submit">
           Login
