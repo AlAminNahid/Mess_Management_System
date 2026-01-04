@@ -51,7 +51,8 @@ export default function LoginForm() {
         <input
           type="email"
           id="email"
-          className="input input-bordered w-full" /* Added border & width */
+          className="input input-bordered w-full"
+          placeholder="example@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -62,7 +63,8 @@ export default function LoginForm() {
         <input
           type="password"
           id="password"
-          className="input input-bordered w-full" /* Added border & width */
+          className="input input-bordered w-full"
+          placeholder="example@"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

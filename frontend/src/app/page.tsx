@@ -14,18 +14,12 @@ export default function Home() {
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <Link
-                href=""
-                className="btn btn-primary mr-1 bg-[#415a77] text-white p-4"
-              >
+              <Link href="" className="btn btn-outline mr-1.5">
                 Contact Us
               </Link>
             </li>
             <li>
-              <Link
-                href=""
-                className="btn btn-primary bg-[#415a77] text-white p-4"
-              >
+              <Link href="" className="btn btn-outline">
                 About Us
               </Link>
             </li>
