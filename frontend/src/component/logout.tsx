@@ -23,7 +23,7 @@ export default function Logout() {
       setError("");
 
       setTimeout(() => {
-        route.push("../auth/login");
+        route.push("/auth/login");
       }, 1000);
     } catch (error) {
       console.log("Logout failed", error);

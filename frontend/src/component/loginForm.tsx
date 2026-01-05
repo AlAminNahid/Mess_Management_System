@@ -51,14 +51,15 @@ export default function LoginForm() {
       }
 
       const userRole = data.member.role;
+      const userID = data.user.id;
 
       if (userRole === "manager") {
         setTimeout(() => {
-          router.push("../dashboards/manager");
+          router.push(`/dashboards/manager/${userID}`);
         }, 1000);
       } else if (userRole === "member") {
         setTimeout(() => {
-          router.push("../dashboards/member");
+          router.push(`/dashboards/member/${userID}`);
         }, 1000);
       }
     } catch (error) {
