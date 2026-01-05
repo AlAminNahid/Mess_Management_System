@@ -7,10 +7,14 @@ export async function createUser(userData: {
   nid: string;
   phone: string;
 }) {
-  const response = await axios.post(
-    process.env.NEXT_PUBLIC_API_ENDPOINT + "/auth/registration",
-    userData
-  );
+  try {
+    const response = await axios.post(
+      process.env.NEXT_PUBLIC_API_ENDPOINT + "/auth/registration",
+      userData
+    );
 
-  return response.data;
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || { message: "Network Error" };
+  }
 }

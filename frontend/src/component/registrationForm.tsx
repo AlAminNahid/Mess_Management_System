@@ -83,9 +83,9 @@ export default function RegistrationForm() {
 
       setTimeout(() => {
         route.push("../auth/login");
-      }, 3000);
+      }, 1000);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       setSuccess(false);
       setError("Registration failed");
     }
