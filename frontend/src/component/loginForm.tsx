@@ -1,6 +1,8 @@
 "use client";
 import { FormEvent, useState } from "react";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
+import { loginUser } from "@/services/user.login";
 
 const loginSchema = z.object({
   email: z
@@ -18,9 +20,11 @@ export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setError("");
 
     const result = loginSchema.safeParse({ email, password });
 
@@ -29,12 +33,18 @@ export default function LoginForm() {
       return;
     }
 
-    alert(
-      `The input Email : ${result.data.email} & Password : ${result.data.password}`
-    );
-    setEmail("");
-    setPassword("");
-    setError("");
+    try {
+      const data = await loginUser(result.data);
+
+      if (!data.member) {
+        router.push("../dashboards/common");
+      } else {
+        router.push("../dashboards/manager");
+      }
+    } catch (error: any) {
+      const errorMessage = error.message || "Login failed, Please try again";
+      setError(Array.isArray(errorMessage) ? errorMessage[0] : errorMessage);
+    }
   };
 
   return (

@@ -2,6 +2,7 @@
 import { FormEvent, useState } from "react";
 import * as z from "zod";
 import { createUser } from "@/services/user.registration";
+import { useRouter } from "next/navigation";
 
 const registerSchema = z.object({
   name: z
@@ -47,7 +48,9 @@ export default function RegistrationForm() {
   const [password, setPassword] = useState<string>("");
   const [nid, setNid] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const route = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -67,7 +70,9 @@ export default function RegistrationForm() {
 
     try {
       const response = await createUser(result.data);
-      alert("User registered successfully");
+
+      setSuccess(true);
+      setError("");
       console.log(response);
 
       setName("");
@@ -75,9 +80,14 @@ export default function RegistrationForm() {
       setPassword("");
       setNid("");
       setPhone("");
-    } catch (err) {
-      console.error(err);
-      alert("Registration failed");
+
+      setTimeout(() => {
+        route.push("../auth/login");
+      }, 3000);
+    } catch (error) {
+      console.error(error);
+      setSuccess(false);
+      setError("Registration failed");
     }
   };
 
@@ -89,6 +99,46 @@ export default function RegistrationForm() {
           className="fieldset bg-base-200 border-base-300 rounded-box w-full max-w-md border p-8 shadow-xl"
         >
           <h2 className="text-center text-3xl font-bold mb-4">Register</h2>
+
+          <div className="mb-4">
+            {success && (
+              <div role="alert" className="alert alert-success shadow-lg mb-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 shrink-0 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>User registered successfully!</span>
+              </div>
+            )}
+
+            {error && (
+              <div role="alert" className="alert alert-error shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 shrink-0 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+          </div>
 
           <label htmlFor="name" className="label font-bold">
             Name:
@@ -154,8 +204,6 @@ export default function RegistrationForm() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
-
-          {error && <p>{error}</p>}
 
           <button className="btn btn-neutral mt-6 w-full" type="submit">
             Submit

@@ -13,6 +13,7 @@ import { LoginService } from './service/login.service';
 import { RegisterService } from './service/register.service';
 import { ForgetPasswordService } from './service/forget-password.service';
 import { ChangePasswordService } from './service/change-password.service';
+import { LogoutController } from './controller/logout.controller';
 
 @Module({
   imports: [
@@ -23,7 +24,19 @@ import { ChangePasswordService } from './service/change-password.service';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  controllers: [LoginController, RegisterController, ForgetPasswordController, ChangePasswordController],
-  providers: [LoginService, RegisterService, ForgetPasswordService, ChangePasswordService, JwtStrategy],
+  controllers: [
+    LoginController,
+    RegisterController,
+    ForgetPasswordController,
+    ChangePasswordController,
+    LogoutController,
+  ],
+  providers: [
+    LoginService,
+    RegisterService,
+    ForgetPasswordService,
+    ChangePasswordService,
+    JwtStrategy,
+  ],
 })
 export class AuthModule {}
