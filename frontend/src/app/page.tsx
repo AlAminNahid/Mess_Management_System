@@ -40,12 +40,12 @@ export default function Home() {
 
         <ul className="menu menu-horizontal px-1 mar">
           <li>
-            <Link href="./auth/login" className="btn btn-neutral mr-1">
+            <Link href="./auth/login" className="btn btn-neutral mr-1 w-30">
               Login
             </Link>
           </li>
           <li>
-            <Link href="./auth/register" className="btn btn-neutral">
+            <Link href="./auth/register" className="btn btn-neutral w-30">
               Registration
             </Link>
           </li>
