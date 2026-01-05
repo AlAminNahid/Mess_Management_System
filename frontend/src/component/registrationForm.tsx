@@ -22,6 +22,7 @@ const registerSchema = z.object({
   password: z
     .string("Password has to be a string value")
     .min(1, "Password is required")
+    .min(6, "Password must be at least 6 characters long")
     .regex(
       /^.*(?=[@#$&]).*$/,
       "Password must contain any of this (@ or # or $ or &) speical characters"
@@ -82,12 +83,14 @@ export default function RegistrationForm() {
       setPhone("");
 
       setTimeout(() => {
-        route.push("../auth/login");
+        route.push("/auth/login");
       }, 1000);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setSuccess(false);
-      setError("Registration failed");
+
+      const errorMessage = error.message;
+      setError(errorMessage);
     }
   };
 

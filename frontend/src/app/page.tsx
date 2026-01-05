@@ -28,7 +28,7 @@ export default function Home() {
       <header className="py-18 px-[8%] text-center">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
           The Ultimate Mess Solution <br />
-          <span className="text-black-600 text-4xl md:text-5xl">
+          <span className="text-blue-600 text-4xl md:text-5xl">
             for Bachelors
           </span>
         </h1>
@@ -40,19 +40,19 @@ export default function Home() {
 
         <ul className="menu menu-horizontal px-1 mar">
           <li>
-            <Link href="./auth/login" className="btn btn-neutral mr-1 w-30">
+            <Link href="/auth/login" className="btn btn-neutral mr-1 w-30">
               Login
             </Link>
           </li>
           <li>
-            <Link href="./auth/register" className="btn btn-neutral w-30">
+            <Link href="/auth/register" className="btn btn-neutral w-30">
               Registration
             </Link>
           </li>
         </ul>
       </header>
 
-      <section className="py-20 px-[8%] grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="py-20 px-[8%] grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
           <span className="inline-block bg-green-100 text-green-700 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-4">
             Manager Only

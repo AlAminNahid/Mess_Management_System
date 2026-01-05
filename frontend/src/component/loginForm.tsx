@@ -8,12 +8,19 @@ const loginSchema = z.object({
   email: z
     .string("It is not a String")
     .min(1, "Email is required")
-    .email("Invalid Email Address"),
+    .regex(
+      /^[a-z0-9.]+@gmail.com$/,
+      "Email must contain @gmail.com at the end and all the character should be in lower case"
+    ),
 
   password: z
     .string("It is not a String")
     .min(1, "Password is required")
-    .min(6, "Password must be at least 6 character"),
+    .min(6, "Password must be at least 6 character")
+    .regex(
+      /^.*(?=[@#$&]).*$/,
+      "Password must contain any of this (@ or # or $ or &) speical characters"
+    ),
 });
 
 export default function LoginForm() {
@@ -62,10 +69,12 @@ export default function LoginForm() {
           router.push(`/dashboards/member/${userID}`);
         }, 1000);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setSuccess(false);
-      setError("login failed");
+
+      const errorMessage = error.message || "An unexpected error occured";
+      setError(errorMessage);
     }
   };
 
