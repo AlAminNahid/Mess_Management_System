@@ -1,8 +1,9 @@
 import axios from "axios";
+import { MessSchemaType } from "@/validation/messSchema";
 
-export async function createMess(messData: { name: string; address: string }) {
+export async function createMess(messData: MessSchemaType) {
   try {
-    const response = await axios.post(
+    await axios.post(
       process.env.NEXT_PUBLIC_API_ENDPOINT + "/mess/createMess",
       messData,
       {

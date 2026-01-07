@@ -1,12 +1,7 @@
 import axios from "axios";
+import { RegisterSchemaType } from "@/validation/registerSchema";
 
-export async function createUser(userData: {
-  name: string;
-  email: string;
-  password: string;
-  nid: string;
-  phone: string;
-}) {
+export async function createUser(userData: RegisterSchemaType) {
   try {
     const response = await axios.post(
       process.env.NEXT_PUBLIC_API_ENDPOINT + "/auth/registration",

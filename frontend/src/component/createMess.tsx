@@ -1,16 +1,7 @@
 "use client";
-import * as z from "zod";
 import { createMess } from "@/services/user.createMess";
 import { FormEvent, useState } from "react";
-
-const messSchema = z.object({
-  name: z
-    .string("It is not a String")
-    .min(1, "Name is required")
-    .max(200, "Mess name can't be greater than 200 characters."),
-
-  address: z.string("It is not a String").min(1, "Address is required"),
-});
+import { messSchema } from "@/validation/messSchema";
 
 export default function CreateMess() {
   const [name, setName] = useState<string>("");
@@ -35,10 +26,12 @@ export default function CreateMess() {
       setError("");
       setName("");
       setAddress("");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setSuccess(false);
-      setError("Creating Mess Failed");
+
+      const errorMessage = error.message || "An unexpected error occured";
+      setError(errorMessage);
     }
   };
 

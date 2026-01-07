@@ -1,6 +1,7 @@
 import axios from "axios";
+import { LoginSchemaType } from "@/validation/loginSchema";
 
-export async function loginUser(userData: { email: string; password: string }) {
+export async function loginUser(userData: LoginSchemaType) {
   try {
     const response = await axios.post(
       process.env.NEXT_PUBLIC_API_ENDPOINT + "/auth/login",
