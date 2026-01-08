@@ -114,7 +114,7 @@ export default function LoginForm() {
           type="email"
           id="email"
           className="input input-bordered w-full"
-          placeholder="example@gmail.com"
+          placeholder="Enter your email here"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -126,7 +126,7 @@ export default function LoginForm() {
           type="password"
           id="password"
           className="input input-bordered w-full"
-          placeholder="example@"
+          placeholder="Enter your password here"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

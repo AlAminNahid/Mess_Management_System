@@ -112,7 +112,7 @@ export default function RegistrationForm() {
             id="name"
             name="name"
             className="input input-bordered w-full"
-            placeholder="MD. Al Amin"
+            placeholder="Enter your name here"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -125,7 +125,7 @@ export default function RegistrationForm() {
             id="email"
             name="email"
             className="input input-bordered w-full"
-            placeholder="example@gmail.com"
+            placeholder="Enter your email here"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -138,7 +138,7 @@ export default function RegistrationForm() {
             id="password"
             name="password"
             className="input input-bordered w-full"
-            placeholder="example@"
+            placeholder="Enter your password here"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -151,7 +151,7 @@ export default function RegistrationForm() {
             id="nid"
             name="nid"
             className="input input-bordered w-full"
-            placeholder="12345678912345"
+            placeholder="Enter your NID number here"
             value={nid}
             onChange={(e) => setNid(e.target.value)}
           />
@@ -164,7 +164,7 @@ export default function RegistrationForm() {
             name="phone"
             id="phone"
             className="input input-bordered w-full"
-            placeholder="01712345678"
+            placeholder="Enter your phone number here"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />

@@ -13,12 +13,12 @@ export default function Home() {
         <div className="flex-1 flex justify-end"></div>
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link href="" className="btn btn-outline mr-1.5">
+            <Link href="/contact" className="btn btn-outline mr-1.5">
               Contact Us
             </Link>
           </li>
           <li>
-            <Link href="" className="btn btn-outline">
+            <Link href="/about" className="btn btn-outline">
               About Us
             </Link>
           </li>
