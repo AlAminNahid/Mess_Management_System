@@ -3,7 +3,7 @@ import {
   IsString,
   MaxLength,
   Matches,
-  MinLength
+  MinLength,
 } from 'class-validator';
 
 export class registrationDTO {

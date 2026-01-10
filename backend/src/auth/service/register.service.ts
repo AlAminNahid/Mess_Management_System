@@ -23,20 +23,32 @@ export class RegisterService {
       throw new ConflictException('Email already registered');
     }
 
-    const salt = await bcrypt.genSalt();
-    const hashPassword = await bcrypt.hash(password, salt);
-    const user = await this.usersRepository.create({
-      name,
-      email,
-      password: hashPassword,
-      nid,
-      phone,
-    });
-    await this.usersRepository.save(user);
+    try {
+      const salt = await bcrypt.genSalt();
+      const hashPassword = await bcrypt.hash(password, salt);
+      const user = await this.usersRepository.create({
+        name,
+        email,
+        password: hashPassword,
+        nid,
+        phone,
+      });
+      await this.usersRepository.save(user);
 
-    console.log('Users registration successful');
+      console.log('Users registration successful');
 
-    const { password: _, ...result } = user as any;
-    return result;
+      const { password: _, ...result } = user as any;
+      return result;
+    } catch (error: any) {
+      if (error.code === '23505') {
+        if (error.detail.includes('nid')) {
+          throw new ConflictException('NID already exists');
+        }
+        if (error.detail.includes('email')) {
+          throw new ConflictException('Email already exists');
+        }
+      }
+      throw error;
+    }
   }
 }

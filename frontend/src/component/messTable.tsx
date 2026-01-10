@@ -1,3 +1,5 @@
+import JoinMessButton from "./joinMessButton";
+
 type Mess = {
   id: number;
   name: string;
@@ -15,7 +17,7 @@ export default function JoinMess({ messes }: JoinMessProps) {
         <table className="table">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Serial</th>
               <th>Name</th>
               <th>Address</th>
               <th>Action</th>
@@ -29,7 +31,7 @@ export default function JoinMess({ messes }: JoinMessProps) {
                 <td>{mess.name}</td>
                 <td>{mess.address}</td>
                 <td>
-                  <button className="btn btn-neutral">Join</button>
+                  <JoinMessButton messID={mess.id} />
                 </td>
               </tr>
             ))}

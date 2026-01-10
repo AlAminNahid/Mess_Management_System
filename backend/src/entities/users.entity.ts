@@ -57,5 +57,5 @@ export class UsersEntity {
   updated_at: string;
 
   @OneToMany(() => MembersEntity, (member) => member.user)
-  members: MembersEntity[]; 
+  members: MembersEntity[];
 }
