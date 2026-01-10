@@ -1,13 +1,11 @@
 "use client";
 
+import HeroSection from "@/component/heroSection";
+
 export default function ContactUs() {
   return (
-    <div className="min-h-screen bg-base-100">
-      <div className="navbar bg-base-100 shadow-sm px-6">
-        <div className="flex-1">
-          <p className="text-xl font-bold whitespace-nowrap">MessMaster</p>
-        </div>
-      </div>
+    <>
+      <HeroSection />
 
       <section className="py-20 px-[8%] text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
@@ -30,7 +28,7 @@ export default function ContactUs() {
               id="email"
               required
               className="input input-bordered w-full"
-              placeholder="you@example.com"
+              placeholder="Enter your email here"
             />
           </div>
 
@@ -65,6 +63,6 @@ export default function ContactUs() {
           </button>
         </form>
       </section>
-    </div>
+    </>
   );
 }

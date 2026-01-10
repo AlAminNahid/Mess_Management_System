@@ -117,4 +117,26 @@ export class MessService {
       'mess & member info': info_show,
     };
   }
+
+  async getAllMesses(userID: number) {
+    const user_info = await this.usersRepository.findOne({
+      where: { id: userID },
+    });
+    if (!user_info) {
+      throw new NotFoundException('User not found');
+    }
+
+    const messes = await this.messRepository.find({
+      select: {
+        id: true,
+        name: true,
+        address: true,
+      },
+    });
+
+    return {
+      message: 'All the messes',
+      messes,
+    };
+  }
 }

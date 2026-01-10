@@ -1,29 +1,22 @@
 "use client";
 import { FormEvent, useState } from "react";
-import { createUser } from "@/services/user.registration";
 import { useRouter } from "next/navigation";
-import { registerSchema } from "@/validation/registerSchema";
+import { loginUser } from "@/services/user.login";
+import { loginSchema } from "@/validation/loginSchema";
+import HeroSection from "@/component/heroSection";
 
-export default function RegistrationForm() {
-  const [name, setName] = useState<string>("");
+export default function LoginForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [nid, setNid] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const route = useRouter();
+  const [success, setSuccess] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setError("");
 
-    const result = registerSchema.safeParse({
-      name,
-      email,
-      password,
-      nid,
-      phone,
-    });
+    const result = loginSchema.safeParse({ email, password });
 
     if (!result.success) {
       setError(result.error.issues[0].message);
@@ -31,21 +24,33 @@ export default function RegistrationForm() {
     }
 
     try {
-      const response = await createUser(result.data);
+      const data = await loginUser(result.data);
 
       setSuccess(true);
       setError("");
-      console.log(response);
-
-      setName("");
       setEmail("");
       setPassword("");
-      setNid("");
-      setPhone("");
 
-      setTimeout(() => {
-        route.push("/auth/login");
-      }, 1000);
+      if (!data.member) {
+        setTimeout(() => {
+          router.push("/dashboards/common");
+        }, 1000);
+
+        return;
+      }
+
+      const userRole = data.member.role;
+      const userID = data.user.id;
+
+      if (userRole === "manager") {
+        setTimeout(() => {
+          router.push(`/dashboards/manager/${userID}`);
+        }, 1000);
+      } else if (userRole === "member") {
+        setTimeout(() => {
+          router.push(`/dashboards/member/${userID}`);
+        }, 1000);
+      }
     } catch (error: any) {
       console.log(error);
       setSuccess(false);
@@ -57,12 +62,14 @@ export default function RegistrationForm() {
 
   return (
     <>
+      <HeroSection />
+
       <div className="flex min-h-screen w-full items-center justify-center">
         <form
           onSubmit={handleSubmit}
           className="fieldset bg-base-200 border-base-300 rounded-box w-full max-w-md border p-8 shadow-xl"
         >
-          <h2 className="text-center text-3xl font-bold mb-4">Register</h2>
+          <h2 className="text-center text-3xl font-bold mb-4">Login</h2>
 
           <div className="mb-4">
             {success && (
@@ -80,7 +87,7 @@ export default function RegistrationForm() {
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span>User registered successfully!</span>
+                <span>User login successfully!</span>
               </div>
             )}
 
@@ -104,73 +111,32 @@ export default function RegistrationForm() {
             )}
           </div>
 
-          <label htmlFor="name" className="label font-bold">
-            Name:
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            className="input input-bordered w-full"
-            placeholder="Enter your name here"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-
           <label htmlFor="email" className="label font-bold">
-            Email:
+            Email :
           </label>
           <input
             type="email"
             id="email"
-            name="email"
             className="input input-bordered w-full"
             placeholder="Enter your email here"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <label htmlFor="password" className="label font-bold">
-            Password:
+          <label htmlFor="password" className="label mt-4 font-bold">
+            Password :
           </label>
           <input
             type="password"
             id="password"
-            name="password"
             className="input input-bordered w-full"
             placeholder="Enter your password here"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <label htmlFor="nid" className="label font-bold">
-            NID:
-          </label>
-          <input
-            type="text"
-            id="nid"
-            name="nid"
-            className="input input-bordered w-full"
-            placeholder="Enter your NID number here"
-            value={nid}
-            onChange={(e) => setNid(e.target.value)}
-          />
-
-          <label htmlFor="phone" className="label font-bold">
-            Phone Number:
-          </label>
-          <input
-            type="text"
-            name="phone"
-            id="phone"
-            className="input input-bordered w-full"
-            placeholder="Enter your phone number here"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-
           <button className="btn btn-neutral mt-6 w-full" type="submit">
-            Submit
+            Login
           </button>
         </form>
       </div>

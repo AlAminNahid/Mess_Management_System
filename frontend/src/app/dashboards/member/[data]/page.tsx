@@ -1,6 +1,7 @@
-import Logout from "@/component/logout";
+import Logout from "@/component/auth/logout";
+import SlideBar from "@/component/slidebar";
 
-export default async function MemberDashboard({
+export default async function ManagerDashboard({
   params,
 }: {
   params: Promise<{ data: string }>;
@@ -10,15 +11,7 @@ export default async function MemberDashboard({
   return (
     <>
       <Logout />
-
-      <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Welcome Member</h1>
-            <h3 className="text-5xl font-bold">Your UserID: {userID}</h3>
-          </div>
-        </div>
-      </div>
+      <SlideBar role="member" />
     </>
   );
 }

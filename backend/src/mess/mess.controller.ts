@@ -2,12 +2,11 @@ import {
   Body,
   Controller,
   Post,
+  Get,
   UseGuards,
   UsePipes,
   ValidationPipe,
   Request,
-  Patch,
-  Param,
 } from '@nestjs/common';
 import { MessService } from './mess.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -30,5 +29,12 @@ export class MessController {
   joinMess(@Body('messID') messID: number, @Request() req) {
     const userID = req.user.userID;
     return this.messService.joinMess(messID, userID);
+  }
+
+  @Get('allMesss')
+  @UseGuards(AuthGuard('jwt'))
+  getAllMesses(@Request() req) {
+    const userID = req.user.userID;
+    return this.messService.getAllMesses(userID);
   }
 }

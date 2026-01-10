@@ -1,29 +1,10 @@
+import HeroSection from "@/component/heroSection";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <>
-      <div className="navbar bg-base-100 shadow-sm flex justify-between">
-        <div className="flex-1">
-          <p className="text-xl font-bold whitespace-nowrap">
-            Welcome To MessMaster
-          </p>
-        </div>
-
-        <div className="flex-1 flex justify-end"></div>
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link href="/contact" className="btn btn-outline mr-1.5">
-              Contact Us
-            </Link>
-          </li>
-          <li>
-            <Link href="/about" className="btn btn-outline">
-              About Us
-            </Link>
-          </li>
-        </ul>
-      </div>
+      <HeroSection showMenu={true} isLanding={true} />
 
       <header className="py-18 px-[8%] text-center">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">

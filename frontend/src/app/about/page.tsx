@@ -1,11 +1,9 @@
+import HeroSection from "@/component/heroSection";
+
 export default function AboutUs() {
   return (
     <>
-      <div className="navbar bg-base-100 shadow-sm flex justify-between">
-        <div className="flex-1">
-          <p className="text-xl font-bold whitespace-nowrap">MessMaster</p>
-        </div>
-      </div>
+      <HeroSection />
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-center mb-8">About Us</h1>

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Logout from "@/component/logout";
+import Logout from "@/component/auth/logout";
 
 export default function CommonDashboardForm() {
   return (
@@ -14,10 +14,12 @@ export default function CommonDashboardForm() {
             <p className="py-6">
               You are not in any mess. Would you like to join one or create one?
             </p>
-            <Link href={"../mess/create"}>
+            <Link href={"/mess/create"}>
               <button className="btn btn-neutral mr-2.5">Create Mess</button>
             </Link>
-            <button className="btn btn-neutral">Join Mess</button>
+            <Link href={"/mess/join"}>
+              <button className="btn btn-neutral">Join Mess</button>
+            </Link>
           </div>
         </div>
       </div>

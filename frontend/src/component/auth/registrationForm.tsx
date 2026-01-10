@@ -1,20 +1,30 @@
 "use client";
-import { createMess } from "@/services/user.createMess";
 import { FormEvent, useState } from "react";
+import { createUser } from "@/services/user.registration";
 import { useRouter } from "next/navigation";
-import { messSchema } from "@/validation/messSchema";
+import { registerSchema } from "@/validation/registerSchema";
+import HeroSection from "@/component/heroSection";
 
-export default function CreateMess() {
+export default function RegistrationForm() {
   const [name, setName] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [nid, setNid] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
-  const router = useRouter();
+  const [error, setError] = useState<string>("");
+  const route = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const result = messSchema.safeParse({ name, address });
+    const result = registerSchema.safeParse({
+      name,
+      email,
+      password,
+      nid,
+      phone,
+    });
 
     if (!result.success) {
       setError(result.error.issues[0].message);
@@ -22,15 +32,20 @@ export default function CreateMess() {
     }
 
     try {
-      const data = await createMess(result.data);
+      const response = await createUser(result.data);
 
       setSuccess(true);
       setError("");
+      console.log(response);
+
       setName("");
-      setAddress("");
+      setEmail("");
+      setPassword("");
+      setNid("");
+      setPhone("");
 
       setTimeout(() => {
-        router.push("/auth/login");
+        route.push("/auth/login");
       }, 1000);
     } catch (error: any) {
       console.log(error);
@@ -43,12 +58,14 @@ export default function CreateMess() {
 
   return (
     <>
+      <HeroSection />
+
       <div className="flex min-h-screen w-full items-center justify-center">
         <form
           onSubmit={handleSubmit}
           className="fieldset bg-base-200 border-base-300 rounded-box w-full max-w-md border p-8 shadow-xl"
         >
-          <h2 className="text-center text-3xl font-bold mb-4">Create Mess</h2>
+          <h2 className="text-center text-3xl font-bold mb-4">Register</h2>
 
           <div className="mb-4">
             {success && (
@@ -66,7 +83,7 @@ export default function CreateMess() {
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span>Mess create successfully!</span>
+                <span>User registered successfully!</span>
               </div>
             )}
 
@@ -98,26 +115,65 @@ export default function CreateMess() {
             id="name"
             name="name"
             className="input input-bordered w-full"
-            placeholder="Anvir Neighbours"
+            placeholder="Enter your name here"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
-          <label htmlFor="address" className="label font-bold">
-            Address:
+          <label htmlFor="email" className="label font-bold">
+            Email:
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            className="input input-bordered w-full"
+            placeholder="Enter your email here"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <label htmlFor="password" className="label font-bold">
+            Password:
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            className="input input-bordered w-full"
+            placeholder="Enter your password here"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <label htmlFor="nid" className="label font-bold">
+            NID:
           </label>
           <input
             type="text"
-            id="address"
-            name="address"
+            id="nid"
+            name="nid"
             className="input input-bordered w-full"
-            placeholder="Bashundhara G Block"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Enter your NID number here"
+            value={nid}
+            onChange={(e) => setNid(e.target.value)}
+          />
+
+          <label htmlFor="phone" className="label font-bold">
+            Phone Number:
+          </label>
+          <input
+            type="text"
+            name="phone"
+            id="phone"
+            className="input input-bordered w-full"
+            placeholder="Enter your phone number here"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
 
           <button className="btn btn-neutral mt-6 w-full" type="submit">
-            Create
+            Submit
           </button>
         </form>
       </div>

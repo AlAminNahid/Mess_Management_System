@@ -85,7 +85,7 @@ export class MemberService {
         posted_date: true,
         member: { id: true, mess: { name: true, address: true } },
       },
-      where: {member: {mess: {id: messID}}}
+      where: { member: { mess: { id: messID } } },
     });
 
     return {

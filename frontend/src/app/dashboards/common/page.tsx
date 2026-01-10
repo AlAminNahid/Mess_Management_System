@@ -1,4 +1,4 @@
-import CommonDashboardForm from "@/component/CommonDashboardForm";
+import CommonDashboardForm from "@/component/CommonDashboard";
 
 export default function CommonDashboard() {
   return (
