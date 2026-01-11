@@ -37,4 +37,18 @@ export class MessController {
     const userID = req.user.userID;
     return this.messService.getAllMesses(userID);
   }
+
+  @Get('totalMeals')
+  @UseGuards(AuthGuard('jwt'))
+  getTotalMeals(@Request() req) {
+    const userID = req.user.userID;
+    return this.messService.getTotalMeals(userID);
+  }
+
+  @Get('totalMealExpense')
+  @UseGuards(AuthGuard('jwt'))
+  gettotalMealExpense(@Request() req) {
+    const userID = req.user.userID;
+    return this.messService.gettotalMealExpense(userID);
+  }
 }

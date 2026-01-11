@@ -1,4 +1,4 @@
-import JoinMessButton from "./joinMessButton";
+import JoinMessButton from "@/component/mess/joinMessButton";
 
 type Mess = {
   id: number;
@@ -10,7 +10,7 @@ type JoinMessProps = {
   messes: Mess[];
 };
 
-export default function JoinMess({ messes }: JoinMessProps) {
+export default function Messtable({ messes }: JoinMessProps) {
   return (
     <>
       <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">

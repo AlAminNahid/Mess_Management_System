@@ -1,4 +1,4 @@
-import CreateMess from "@/component/createMess";
+import CreateMess from "@/component/mess/createMess";
 import HeroSection from "@/component/heroSection";
 
 export default function Create() {

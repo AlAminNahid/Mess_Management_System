@@ -4,6 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MealExpenseIterationsEntity } from 'src/entities/meal_expense_iterations.entity';
+import { MealsEntity } from 'src/entities/meals.entity';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { UsersEntity } from 'src/entities/users.entity';
@@ -18,6 +20,10 @@ export class MessService {
     private memberRepository: Repository<MembersEntity>,
     @InjectRepository(MessesEntity)
     private messRepository: Repository<MessesEntity>,
+    @InjectRepository(MealsEntity)
+    private mealRepository: Repository<MealsEntity>,
+    @InjectRepository(MealExpenseIterationsEntity)
+    private mealExpenseRepository: Repository<MealExpenseIterationsEntity>,
   ) {}
 
   async createMess(name: string, address: string, userID: number) {
@@ -137,6 +143,64 @@ export class MessService {
     return {
       message: 'All the messes',
       messes,
+    };
+  }
+
+  async getTotalMeals(userID: number) {
+    const member = await this.memberRepository.findOne({
+      where: {
+        user: { id: userID },
+        is_active: true,
+      },
+      relations: ['mess'],
+    });
+
+    if (!member) {
+      throw new NotFoundException('User is not an active member of any mess');
+    }
+
+    const messID = member.mess.id;
+
+    const result = await this.mealRepository
+      .createQueryBuilder('meal')
+      .leftJoin('meal.member', 'member')
+      .leftJoin('member.mess', 'mess')
+      .select('SUM(meal.meal_count)', 'totalMeals')
+      .where('mess.id = :messID', { messID })
+      .getRawOne();
+
+    return {
+      messID,
+      totalMeals: Number(result.totalMeals) || 0,
+    };
+  }
+
+  async gettotalMealExpense(userID: number) {
+    const member = await this.memberRepository.findOne({
+      where: {
+        user: { id: userID },
+        is_active: true,
+      },
+      relations: ['mess'],
+    });
+
+    if (!member) {
+      throw new NotFoundException('User is not an active member of any mess');
+    }
+
+    const messID = member.mess.id;
+
+    const result = await this.mealExpenseRepository
+      .createQueryBuilder('expense')
+      .leftJoin('expense.member', 'member')
+      .leftJoin('member.mess', 'mess')
+      .select('SUM(expense.amount)', 'totalExpense')
+      .where('mess.id = :messID', { messID })
+      .getRawOne();
+
+    return {
+      messID,
+      totalExpense: Number(result.totalExpense) || 0,
     };
   }
 }

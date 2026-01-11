@@ -1,11 +1,27 @@
-import ManagerContent from "./managerContent";
-import MemberContent from "./memberContent";
+"use client";
+
+import { useState } from "react";
+import ManagerContent from "./dashboard/manager/managerContent";
+import MemberContent from "./dashboard/member/memberContent";
 
 type SlideBarProps = {
   role: "manager" | "member";
+  messData: {
+    totalMeals: number;
+  };
 };
 
-export default function SlideBar({ role }: SlideBarProps) {
+type ManagerContentProps =
+  | "homepage"
+  | "profile"
+  | "meals"
+  | "utility"
+  | "settings";
+
+export default function SlideBar({ role, messData }: SlideBarProps) {
+  const [activeSection, setActiveSection] =
+    useState<ManagerContentProps>("homepage");
+
   return (
     <>
       <div className="drawer lg:drawer-open">
@@ -40,7 +56,11 @@ export default function SlideBar({ role }: SlideBarProps) {
           </nav>
 
           <div className="p-4">
-            {role === "manager" ? <ManagerContent /> : <MemberContent />}
+            {role === "manager" ? (
+              <ManagerContent section={activeSection} messData={messData} />
+            ) : (
+              <MemberContent />
+            )}
           </div>
         </div>
 
@@ -57,6 +77,7 @@ export default function SlideBar({ role }: SlideBarProps) {
                 <button
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="Homepage"
+                  onClick={() => setActiveSection("homepage")}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +99,11 @@ export default function SlideBar({ role }: SlideBarProps) {
               {role === "manager" && (
                 <>
                   <li>
-                    <button>
+                    <button
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Profile"
+                      onClick={() => setActiveSection("profile")}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -100,7 +125,11 @@ export default function SlideBar({ role }: SlideBarProps) {
                   </li>
 
                   <li>
-                    <button>
+                    <button
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Meals"
+                      onClick={() => setActiveSection("meals")}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -120,7 +149,11 @@ export default function SlideBar({ role }: SlideBarProps) {
                   </li>
 
                   <li>
-                    <button>
+                    <button
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Utility"
+                      onClick={() => setActiveSection("utility")}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -143,6 +176,7 @@ export default function SlideBar({ role }: SlideBarProps) {
                 <button
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="Settings"
+                  onClick={() => setActiveSection("settings")}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

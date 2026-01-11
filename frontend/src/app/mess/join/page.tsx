@@ -1,5 +1,5 @@
 import HeroSection from "@/component/heroSection";
-import JoinMess from "@/component/messTable";
+import MessTable from "@/component/mess/messTable";
 import { getAllMesses } from "@/services/user.allMesses";
 
 export default async function Join() {
@@ -8,7 +8,7 @@ export default async function Join() {
   return (
     <>
       <HeroSection />
-      <JoinMess messes={data.messes} />
+      <MessTable messes={data.messes} />
     </>
   );
 }
