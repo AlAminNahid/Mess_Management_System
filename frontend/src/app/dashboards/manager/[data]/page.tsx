@@ -1,6 +1,7 @@
-import Logout from "@/component/auth/logout";
-import SlideBar from "@/component/slidebar";
-import { getMessData } from "@/services/manager.messTotalMeals";
+import Logout from "@/components/auth/logout";
+import SlideBar from "@/components/slidebar";
+import { getTotalMeals } from "@/services/manager.messTotalMeals";
+import { getTotalMealExpense } from "@/services/manager.messTotalMealExpense";
 
 export default async function ManagerDashboard({
   params,
@@ -8,12 +9,19 @@ export default async function ManagerDashboard({
   params: Promise<{ data: string }>;
 }) {
   const userID = (await params).data;
-  const totalMeals = await getMessData();
+  const totalMeals = await getTotalMeals();
+  const totalMealExpense = await getTotalMealExpense();
+  const perHeadMeal = Math.round(totalMealExpense / totalMeals);
 
   return (
     <>
       <Logout />
-      <SlideBar role="manager" messData={totalMeals} />
+      <SlideBar
+        role="manager"
+        totalMeals={totalMeals}
+        totalMealExpense={totalMealExpense}
+        perHeadMeal={perHeadMeal}
+      />
     </>
   );
 }

@@ -1,5 +1,5 @@
-import Logout from "@/component/auth/logout";
-import SlideBar from "@/component/slidebar";
+import Logout from "@/components/auth/logout";
+import SlideBar from "@/components/slidebar";
 
 export default async function ManagerDashboard({
   params,
@@ -11,7 +11,12 @@ export default async function ManagerDashboard({
   return (
     <>
       <Logout />
-      <SlideBar role="member" />
+      <SlideBar
+        role="member"
+        totalMeals={0}
+        totalMealExpense={0}
+        perHeadMeal={0}
+      />
     </>
   );
 }

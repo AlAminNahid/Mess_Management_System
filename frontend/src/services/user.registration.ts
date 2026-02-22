@@ -5,7 +5,10 @@ export async function createUser(userData: RegisterSchemaType) {
   try {
     const response = await axios.post(
       process.env.NEXT_PUBLIC_API_ENDPOINT + "/auth/registration",
-      userData
+      userData,
+      {
+        withCredentials: true,
+      }
     );
 
     return response.data;

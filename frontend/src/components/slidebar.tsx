@@ -4,12 +4,12 @@ import { useState } from "react";
 import ManagerContent from "./dashboard/manager/managerContent";
 import MemberContent from "./dashboard/member/memberContent";
 
-type SlideBarProps = {
+interface SlideBarProps {
   role: "manager" | "member";
-  messData: {
-    totalMeals: number;
-  };
-};
+  totalMeals: number;
+  totalMealExpense: number;
+  perHeadMeal: number;
+}
 
 type ManagerContentProps =
   | "homepage"
@@ -18,7 +18,12 @@ type ManagerContentProps =
   | "utility"
   | "settings";
 
-export default function SlideBar({ role, messData }: SlideBarProps) {
+export default function SlideBar({
+  role,
+  totalMeals,
+  totalMealExpense,
+  perHeadMeal,
+}: SlideBarProps) {
   const [activeSection, setActiveSection] =
     useState<ManagerContentProps>("homepage");
 
@@ -57,7 +62,12 @@ export default function SlideBar({ role, messData }: SlideBarProps) {
 
           <div className="p-4">
             {role === "manager" ? (
-              <ManagerContent section={activeSection} messData={messData} />
+              <ManagerContent
+                section={activeSection}
+                totalMeals={totalMeals}
+                totalMealExpense={totalMealExpense}
+                perHeadMeal={perHeadMeal}
+              />
             ) : (
               <MemberContent />
             )}

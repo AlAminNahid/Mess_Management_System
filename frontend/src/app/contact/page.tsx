@@ -1,6 +1,5 @@
 "use client";
-
-import HeroSection from "@/component/heroSection";
+import HeroSection from "@/components/heroSection";
 
 export default function ContactUs() {
   return (
@@ -17,48 +16,57 @@ export default function ContactUs() {
         </p>
       </section>
 
-      <section className="flex items-center justify-center px-4 pb-20">
-        <form className="bg-base-200 border border-base-300 rounded-box w-full max-w-lg p-8 shadow-xl space-y-4">
+      <section className="flex items-center justify-center px-[8%] pb-24">
+        <form
+          className="w-full max-w-xl bg-white border border-slate-200 
+                   rounded-2xl shadow-sm p-10 space-y-6"
+        >
           <div>
-            <label htmlFor="email" className="label font-semibold">
+            <label className="block text-sm font-semibold mb-2">
               Your Email
             </label>
             <input
               type="email"
-              id="email"
               required
-              className="input input-bordered w-full"
-              placeholder="Enter your email here"
+              className="w-full border border-slate-300 rounded-xl px-4 py-3 
+                   focus:outline-none focus:ring-2 focus:ring-blue-600 
+                   focus:border-blue-600 transition"
+              placeholder="Enter your email"
             />
           </div>
 
           <div>
-            <label htmlFor="subject" className="label font-semibold">
-              Subject
-            </label>
+            <label className="block text-sm font-semibold mb-2">Subject</label>
             <input
               type="text"
-              id="subject"
               required
-              className="input input-bordered w-full"
+              className="w-full border border-slate-300 rounded-xl px-4 py-3 
+                   focus:outline-none focus:ring-2 focus:ring-blue-600 
+                   focus:border-blue-600 transition"
               placeholder="What is this about?"
             />
           </div>
 
           <div>
-            <label htmlFor="message" className="label font-semibold">
+            <label className="block text-sm font-semibold mb-2">
               Your Message
             </label>
             <textarea
-              id="message"
               required
-              rows={4}
-              className="textarea textarea-bordered w-full"
+              rows={5}
+              className="w-full border border-slate-300 rounded-xl px-4 py-3 
+                   focus:outline-none focus:ring-2 focus:ring-blue-600 
+                   focus:border-blue-600 transition resize-none"
               placeholder="Write your message here..."
             />
           </div>
 
-          <button className="btn btn-neutral w-full mt-4" type="submit">
+          <button
+            type="submit"
+            className="w-full bg-black text-white py-3 rounded-xl 
+                 font-semibold hover:bg-slate-900 
+                 transition duration-200"
+          >
             Send Message
           </button>
         </form>
