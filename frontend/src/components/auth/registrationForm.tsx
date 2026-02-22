@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { createUser } from "@/services/user.registration";
 import { useRouter } from "next/navigation";
 import { registerSchema } from "@/validation/registerSchema";
@@ -16,6 +16,16 @@ export default function RegistrationForm() {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const route = useRouter();
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();

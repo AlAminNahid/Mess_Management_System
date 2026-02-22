@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/services/user.login";
 import { loginSchema } from "@/validation/loginSchema";
@@ -15,6 +15,16 @@ export default function LoginForm() {
   const [success, setSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -155,7 +165,7 @@ export default function LoginForm() {
 
             <div className="flex items-center justify-between text-sm">
               <Link
-                href="/#"
+                href="/auth/forgetPassword"
                 className="text-blue-600 font-medium hover:underline"
               >
                 Forgot password?
