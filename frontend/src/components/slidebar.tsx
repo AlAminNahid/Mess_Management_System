@@ -3,12 +3,11 @@
 import { useState } from "react";
 import ManagerContent from "./dashboard/manager/managerContent";
 import MemberContent from "./dashboard/member/memberContent";
+import Logout from "./auth/logout";
 
-interface SlideBarProps {
+interface Props {
   role: "manager" | "member";
-  totalMeals: number;
-  totalMealExpense: number;
-  perHeadMeal: number;
+  userName: string;
 }
 
 type ManagerContentProps =
@@ -18,17 +17,13 @@ type ManagerContentProps =
   | "utility"
   | "settings";
 
-export default function SlideBar({
-  role,
-  totalMeals,
-  totalMealExpense,
-  perHeadMeal,
-}: SlideBarProps) {
+export default function SlideBar({ role, userName }: Props) {
   const [activeSection, setActiveSection] =
     useState<ManagerContentProps>("homepage");
 
   return (
     <>
+      <Logout />
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
 
@@ -55,19 +50,12 @@ export default function SlideBar({
               </svg>
             </label>
 
-            <div className="px-4">
-              {role === "manager" ? "Welcome Manager" : "Welcome Member"}
-            </div>
+            <div className="px-4">Welcome {userName}</div>
           </nav>
 
           <div className="p-4">
             {role === "manager" ? (
-              <ManagerContent
-                section={activeSection}
-                totalMeals={totalMeals}
-                totalMealExpense={totalMealExpense}
-                perHeadMeal={perHeadMeal}
-              />
+              <ManagerContent section={activeSection} />
             ) : (
               <MemberContent />
             )}

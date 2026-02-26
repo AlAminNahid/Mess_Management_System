@@ -1,27 +1,11 @@
 import HomePage from "./homePage";
 
-type ManagerContentProps = {
-  section: "homepage" | "profile" | "meals" | "utility" | "settings";
-  totalMeals: number;
-  totalMealExpense: number;
-  perHeadMeal: number;
-};
+type Section = "homepage" | "profile" | "meals" | "utility" | "settings";
 
-export default function ManagerContent({
-  section,
-  totalMeals,
-  totalMealExpense,
-  perHeadMeal,
-}: ManagerContentProps) {
+export default function ManagerContent({ section }: { section: Section }) {
   switch (section) {
     case "homepage":
-      return (
-        <HomePage
-          totalMeals={totalMeals}
-          totalMealExpense={totalMealExpense}
-          perHeadMeal={perHeadMeal}
-        />
-      );
+      return <HomePage />;
     case "profile":
       return <p>Manager Profile Page</p>;
     case "meals":
