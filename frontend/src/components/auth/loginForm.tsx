@@ -1,7 +1,7 @@
 "use client";
 import { FormEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/services/user.login";
+import { loginUser } from "@/services/auth/user.login";
 import { loginSchema } from "@/validation/loginSchema";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import HeroSection from "@/components/heroSection";
@@ -141,7 +141,7 @@ export default function LoginForm() {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "Text" : "password"}
                   className="w-full border border-slate-300 rounded-xl px-4 py-3 pl-10 
                        focus:outline-none focus:ring-2 focus:ring-blue-600 
                        focus:border-blue-600 transition"

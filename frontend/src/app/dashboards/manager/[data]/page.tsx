@@ -1,7 +1,7 @@
 import Logout from "@/components/auth/logout";
 import SlideBar from "@/components/slidebar";
-import { getTotalMeals } from "@/services/manager.messTotalMeals";
-import { getTotalMealExpense } from "@/services/manager.messTotalMealExpense";
+import { getTotalMeals } from "@/services/dashboard/manager.messTotalMeals";
+import { getTotalMealExpense } from "@/services/dashboard/manager.messTotalMealExpense";
 
 export default async function ManagerDashboard({
   params,

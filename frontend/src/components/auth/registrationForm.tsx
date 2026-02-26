@@ -1,9 +1,9 @@
 "use client";
 import { FormEvent, useEffect, useState } from "react";
-import { createUser } from "@/services/user.registration";
+import { createUser } from "@/services/auth/user.registration";
 import { useRouter } from "next/navigation";
 import { registerSchema } from "@/validation/registerSchema";
-import { User, Mail, Lock, Phone, CreditCard } from "lucide-react";
+import { User, Mail, Lock, Phone, CreditCard, EyeOff, Eye } from "lucide-react";
 import HeroSection from "@/components/heroSection";
 
 export default function RegistrationForm() {
@@ -15,6 +15,7 @@ export default function RegistrationForm() {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const route = useRouter();
 
   useEffect(() => {
@@ -166,7 +167,7 @@ export default function RegistrationForm() {
               />
 
               <input
-                type="password"
+                type={showPassword ? "Text" : "password"}
                 className="w-full border border-slate-300 rounded-xl px-4 py-3 pl-10
                  focus:outline-none focus:ring-2 focus:ring-blue-600
                  focus:border-blue-600 transition"
@@ -174,6 +175,13 @@ export default function RegistrationForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+
+              <div
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 z-10"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </div>
             </div>
           </div>
 

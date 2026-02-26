@@ -3,7 +3,7 @@
 import { useState, FormEvent, useEffect } from "react";
 import { Mail, Lock, EyeOff, Eye } from "lucide-react";
 import { forgetPasswordSchema } from "@/validation/forgetPassSchema";
-import { forgetPass } from "@/services/user.forgetPass";
+import { forgetPass } from "@/services/auth/user.forgetPass";
 import { useRouter } from "next/navigation";
 
 export default function ForgetPasswordForm() {
