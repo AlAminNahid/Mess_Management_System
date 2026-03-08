@@ -72,13 +72,14 @@ export default function HomePage() {
 
       <div className="mb-8 mt-10">
         <h2 className="text-3xl font-extrabold tracking-tight mb-2">
-          Mess Overview
+          User Overview
         </h2>
         <p className="text-slate-500 text-sm">
-          Summary of total meals, bazaar expenses and per head meal cost.
+          Summary of total meals, submitted amount, meals cost and in-total
+          amount.
         </p>
       </div>
-      <div className="grid gap-8 md:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-4">
         <div
           className="bg-white border border-slate-200 
                         rounded-2xl p-8 shadow-sm 
@@ -127,6 +128,22 @@ export default function HomePage() {
           <p className="text-4xl font-extrabold tracking-tight">
             ৳ {perHeadMeal}
           </p>
+        </div>
+
+        <div
+          className="bg-white border border-slate-200 
+                        rounded-2xl p-8 shadow-sm 
+                        hover:shadow-xl hover:-translate-y-2 
+                        transition-all duration-300"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-sm font-semibold text-slate-500">
+              In-Total Cost
+            </h3>
+            <Utensils className="text-blue-600" size={22} />
+          </div>
+
+          <p className="text-4xl font-extrabold tracking-tight">{totalMeals}</p>
         </div>
       </div>
     </div>

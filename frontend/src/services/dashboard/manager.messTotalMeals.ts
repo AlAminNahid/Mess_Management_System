@@ -11,7 +11,7 @@ export async function getTotalMeals() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     return response.data.totalMeals;
   } catch (error: any) {
