@@ -3,9 +3,14 @@
 import { createContext, useContext } from "react";
 
 interface DashboardContextType {
+  role: "manager" | "member";
   totalMeals: number;
   totalMealExpense: number;
   perHeadMeal: number;
+  userName: string;
+  userEmail: string;
+  userNID: string;
+  userPhone: string;
 }
 
 const DashboardContext = createContext<DashboardContextType | null>(null);

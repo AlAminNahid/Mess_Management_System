@@ -23,12 +23,16 @@ export default async function Login({
   const perHeadMeal =
     totalMeals > 0 ? Math.round(totalMealExpense / totalMeals) : 0;
   const user = await GetUserById(userID);
+  console.log(user);
 
   return (
     <>
       <DashboardLayout
         role="manager"
         userName={user.name}
+        userEmail={user.email}
+        userNID={user.nid}
+        userPhone={user.phone}
         totalMeals={totalMeals}
         totalMealExpense={totalMealExpense}
         perHeadMeal={perHeadMeal}

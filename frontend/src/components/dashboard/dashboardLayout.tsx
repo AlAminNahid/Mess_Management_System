@@ -6,6 +6,9 @@ import SlideBar from "@/components/slidebar";
 interface Props {
   role: "manager" | "member";
   userName: string;
+  userEmail: string;
+  userNID: string;
+  userPhone: string;
   totalMeals: number;
   totalMealExpense: number;
   perHeadMeal: number;
@@ -18,11 +21,25 @@ export default function DashboardLayout({
   totalMealExpense,
   perHeadMeal,
   userName,
+  userEmail,
+  userNID,
+  userPhone,
   children,
 }: Props) {
   return (
     <>
-      <DashboardProvider value={{ totalMeals, totalMealExpense, perHeadMeal }}>
+      <DashboardProvider
+        value={{
+          role,
+          totalMeals,
+          totalMealExpense,
+          perHeadMeal,
+          userName,
+          userEmail,
+          userNID,
+          userPhone,
+        }}
+      >
         {children}
         <SlideBar role={role} userName={userName} />
       </DashboardProvider>
