@@ -11,6 +11,12 @@ interface DashboardContextType {
   userEmail: string;
   userNID: string;
   userPhone: string;
+  userMeals: number;
+  userSubmitMoney: number;
+  userTotalCost: number;
+  userInTotalCost: number;
+  utilityCost: any[];
+  messID: number;
 }
 
 const DashboardContext = createContext<DashboardContextType | null>(null);

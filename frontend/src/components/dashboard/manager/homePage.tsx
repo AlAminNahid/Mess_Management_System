@@ -4,7 +4,15 @@ import { useDashboard } from "@/components/dashboard/dashboardContext";
 import { Utensils, Wallet, TrendingUp } from "lucide-react";
 
 export default function HomePage() {
-  const { totalMeals, totalMealExpense, perHeadMeal } = useDashboard();
+  const {
+    totalMeals,
+    totalMealExpense,
+    perHeadMeal,
+    userMeals,
+    userSubmitMoney,
+    userTotalCost,
+    userInTotalCost,
+  } = useDashboard();
 
   return (
     <div className="min-h-[60vh] px-6 py-6 bg-white">
@@ -93,7 +101,7 @@ export default function HomePage() {
             <Utensils className="text-blue-600" size={22} />
           </div>
 
-          <p className="text-4xl font-extrabold tracking-tight">{totalMeals}</p>
+          <p className="text-4xl font-extrabold tracking-tight">{userMeals}</p>
         </div>
 
         <div
@@ -110,7 +118,7 @@ export default function HomePage() {
           </div>
 
           <p className="text-4xl font-extrabold tracking-tight">
-            ৳ {totalMealExpense}
+            ৳ {userSubmitMoney}
           </p>
         </div>
 
@@ -126,7 +134,7 @@ export default function HomePage() {
           </div>
 
           <p className="text-4xl font-extrabold tracking-tight">
-            ৳ {perHeadMeal}
+            ৳ {userTotalCost}
           </p>
         </div>
 
@@ -143,7 +151,9 @@ export default function HomePage() {
             <Utensils className="text-blue-600" size={22} />
           </div>
 
-          <p className="text-4xl font-extrabold tracking-tight">{totalMeals}</p>
+          <p className="text-4xl font-extrabold tracking-tight">
+            {userInTotalCost}
+          </p>
         </div>
       </div>
     </div>

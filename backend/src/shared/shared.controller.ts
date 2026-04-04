@@ -15,4 +15,19 @@ export class SharedController {
   getUserById(@Param('userID') userID: string) {
     return this.sharedService.getUserById(userID);
   }
+
+  @Get('messByUserID/:userID')
+  getMessByUserID(@Param('userID') userID: string) {
+    return this.sharedService.getMessByUserID(userID);
+  }
+
+  @Get('usersMeals/:userID')
+  getUserMeals(@Param('userID') userID: string) {
+    return this.sharedService.getUserMeals(userID);
+  }
+
+  @Get('userMoneySubmit/:userID')
+  getUserMoneySubmit(@Param('userID') userID: string) {
+    return this.sharedService.getUserMoneySubmit(userID);
+  }
 }

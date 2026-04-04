@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { getTotalMeals } from "@/services/dashboard/manager.messTotalMeals";
 import { getTotalMealExpense } from "@/services/dashboard/manager.messTotalMealExpense";
 import DashboardLayout from "@/components/dashboard/dashboardLayout";
-import { GetUserById } from "@/services/getUserById";
+import { GetUserById, GetMessByUserId } from "@/services/getUserById";
+import { usersMeals } from "@/services/users.meals";
+import { userMoneySubmit } from "@/services/user.moneySubmit";
+import { getUtilityCosts } from "@/services/dashboard/manager.getUtilityCost";
 
 export const metadata: Metadata = {
   title: "Manager Dashboard",
@@ -22,7 +25,18 @@ export default async function Login({
   const totalMealExpense = await getTotalMealExpense();
   const perHeadMeal =
     totalMeals > 0 ? Math.round(totalMealExpense / totalMeals) : 0;
+
   const user = await GetUserById(userID);
+  const userMeals = await usersMeals(userID);
+  const userSubmitMoney = await userMoneySubmit(userID);
+  const userTotalCost =
+    userMeals.totalMeals > 0
+      ? Math.round(userMeals.totalMeals * perHeadMeal)
+      : 0;
+  const userInTotalCost = userSubmitMoney.totalAmount - userTotalCost;
+
+  const messID = await GetMessByUserId(userID);
+  const utilityCost = await getUtilityCosts(messID);
 
   return (
     <>
@@ -35,6 +49,12 @@ export default async function Login({
         totalMeals={totalMeals}
         totalMealExpense={totalMealExpense}
         perHeadMeal={perHeadMeal}
+        userMeals={userMeals.totalMeals}
+        userSubmitMoney={userSubmitMoney.totalAmount}
+        userTotalCost={userTotalCost}
+        userInTotalCost={userInTotalCost}
+        utilityCost={utilityCost}
+        messID={messID}
       >
         {children}
       </DashboardLayout>

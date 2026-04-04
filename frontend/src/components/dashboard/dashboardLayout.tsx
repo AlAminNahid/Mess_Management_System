@@ -12,6 +12,12 @@ interface Props {
   totalMeals: number;
   totalMealExpense: number;
   perHeadMeal: number;
+  userMeals: number;
+  userSubmitMoney: number;
+  userTotalCost: number;
+  userInTotalCost: number;
+  utilityCost: any[];
+  messID: number;
   children: React.ReactNode;
 }
 
@@ -24,6 +30,12 @@ export default function DashboardLayout({
   userEmail,
   userNID,
   userPhone,
+  userMeals,
+  userSubmitMoney,
+  userTotalCost,
+  userInTotalCost,
+  utilityCost,
+  messID,
   children,
 }: Props) {
   return (
@@ -38,6 +50,12 @@ export default function DashboardLayout({
           userEmail,
           userNID,
           userPhone,
+          userMeals,
+          userSubmitMoney,
+          userTotalCost,
+          userInTotalCost,
+          utilityCost,
+          messID,
         }}
       >
         {children}

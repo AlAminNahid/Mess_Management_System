@@ -8,6 +8,7 @@ import {
   Param,
   UsePipes,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { UtilityCostService } from '../services/utility-cost.service';
 import { utilityCostDTO } from 'src/dtos/utility_cost.dto';
@@ -35,6 +36,11 @@ export class UtilityCostController {
       info.maid,
       userID,
     );
+  }
+
+  @Get('getUtilityCosts/:messID')
+  getUtilityCosts(@Param('messID') messID: number) {
+    return this.utilityCostService.getUtilityCosts(messID);
   }
 
   @Put('updateUtilityCosts/:utilityCostID')
