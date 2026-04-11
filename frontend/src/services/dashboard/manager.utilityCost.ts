@@ -1,10 +1,10 @@
 import axios from "axios";
 
-export default async function JoinMess(messID: number) {
+export async function addUtilityCost(data: any) {
   try {
     const response = await axios.post(
-      process.env.NEXT_PUBLIC_API_ENDPOINT + "/mess/joinMess",
-      { messID: messID },
+      process.env.NEXT_PUBLIC_API_ENDPOINT + `/utility_cost/insertUtiltyCosts`,
+      data,
       {
         withCredentials: true,
       },

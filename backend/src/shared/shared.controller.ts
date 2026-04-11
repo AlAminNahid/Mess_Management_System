@@ -1,4 +1,33 @@
-import { Controller } from "@nestjs/common";
+import { Get, Controller, UseGuards, Param, Request } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { UserRole } from 'src/dtos/auth/role.enum';
+import { SharedService } from './shared.service';
 
-@Controller()
-export class SharedController{}
+@UseGuards(AuthGuard('jwt'), RolesGuard)
+@Roles(UserRole.MANAGER, UserRole.MEMBER)
+@Controller('shared')
+export class SharedController {
+  constructor(private readonly sharedService: SharedService) {}
+
+  @Get('userById/:userID')
+  getUserById(@Param('userID') userID: string) {
+    return this.sharedService.getUserById(userID);
+  }
+
+  @Get('messByUserID/:userID')
+  getMessByUserID(@Param('userID') userID: string) {
+    return this.sharedService.getMessByUserID(userID);
+  }
+
+  @Get('usersMeals/:userID')
+  getUserMeals(@Param('userID') userID: string) {
+    return this.sharedService.getUserMeals(userID);
+  }
+
+  @Get('userMoneySubmit/:userID')
+  getUserMoneySubmit(@Param('userID') userID: string) {
+    return this.sharedService.getUserMoneySubmit(userID);
+  }
+}

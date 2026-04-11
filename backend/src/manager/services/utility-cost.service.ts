@@ -64,6 +64,17 @@ export class UtilityCostService {
     };
   }
 
+  async getUtilityCosts(messID: number) {
+    return this.utilityCostsRepository.find({
+      where: {
+        mess: { id: messID },
+      },
+      order: {
+        created_at: 'DESC',
+      },
+    });
+  }
+
   async updateUtilityCosts(
     utilityCostID: number,
     messID: number,

@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-type HeroSectionProps = {
+interface HeroSectionProps {
   showMenu?: boolean;
   isLanding?: boolean;
-};
+}
 
 export default function HeroSection({
   showMenu = false,
@@ -29,7 +29,7 @@ export default function HeroSection({
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="btn btn-outline">
+                <Link href="/about" className="btn btn-outline mr-1.5">
                   About Us
                 </Link>
               </li>

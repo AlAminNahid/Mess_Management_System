@@ -1,5 +1,5 @@
-import HeroSection from "@/component/heroSection";
-import MessTable from "@/component/mess/messTable";
+import HeroSection from "@/components/heroSection";
+import MessTable from "@/components/mess/messTable";
 import { getAllMesses } from "@/services/user.allMesses";
 
 export default async function Join() {
