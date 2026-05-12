@@ -67,7 +67,7 @@ export class MessService {
     };
 
     return {
-      message: 'Mess created and manager inserted successfully',
+      message: 'Mess created and welcome manager',
       'mess & member info': show_info,
     };
   }

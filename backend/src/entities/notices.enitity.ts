@@ -18,31 +18,31 @@ export class NoticesEntity {
 
   @Column({
     type: 'varchar',
-    length : 100
+    length: 100,
   })
-  title : string;
+  title: string;
 
   @Column({
-    type : 'varchar'
+    type: 'varchar',
   })
-  description : string;
+  description: string;
 
   @CreateDateColumn({
-    type : 'timestamp'
+    type: 'timestamp',
   })
-  posted_date : Timestamp;
+  posted_date: Timestamp;
 
   @ManyToOne(() => MembersEntity, (member) => member.notices)
   @JoinColumn({
-    name : 'member_id'
+    name: 'member_id',
   })
-  member : MembersEntity;
+  member: MembersEntity;
 
   @Column({
-    type : 'enum',
-    enum : NoticeType
+    type: 'enum',
+    enum: NoticeType,
   })
-  notice_type : string;
+  notice_type: string;
 
   @CreateDateColumn()
   created_at: Timestamp;

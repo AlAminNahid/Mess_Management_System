@@ -19,7 +19,7 @@ export class MessesEntity {
   @Column({
     type: 'varchar',
     length: 200,
-    unique : true
+    unique: true,
   })
   name: string;
 
@@ -30,8 +30,8 @@ export class MessesEntity {
 
   @Column({
     type: 'enum',
-    enum : [true, false],
-    default : true
+    enum: [true, false],
+    default: true,
   })
   is_active: boolean;
 
@@ -46,8 +46,8 @@ export class MessesEntity {
   updated_at: Timestamp;
 
   @OneToMany(() => MembersEntity, (member) => member.mess)
-  members : MembersEntity[];
+  members: MembersEntity[];
 
   @OneToMany(() => UtilityCostsEntity, (cost) => cost.mess)
-  utility_costs : UtilityCostsEntity[];
+  utility_costs: UtilityCostsEntity[];
 }
