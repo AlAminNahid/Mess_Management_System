@@ -17,9 +17,9 @@ export class MealExpenseIterationsEntity {
 
   @ManyToOne(() => MembersEntity, (member) => member.meal_expense)
   @JoinColumn({
-    name : 'member_id'
+    name: 'member_id',
   })
-  member : MembersEntity;
+  member: MembersEntity;
 
   @Column({
     type: 'decimal',
@@ -29,7 +29,7 @@ export class MealExpenseIterationsEntity {
   amount: number;
 
   @CreateDateColumn({
-    type : 'timestamp'
+    type: 'timestamp',
   })
   date: Timestamp;
 
@@ -39,7 +39,7 @@ export class MealExpenseIterationsEntity {
   description: string;
 
   @Column()
-  manager_id : number;
+  manager_id: number;
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -7,7 +7,7 @@ import {
   ValidationPipe,
   Request,
   Param,
-  Get
+  Get,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/roles.decorator';
@@ -20,9 +20,7 @@ import { NoticeDTO } from 'src/dtos/notice.dto';
 @Roles(UserRole.MANAGER)
 @Controller()
 export class NoticesController {
-  constructor(
-    private readonly noticesService: NoticesService
-  ) {}
+  constructor(private readonly noticesService: NoticesService) {}
 
   @Post('sendNotice')
   @UsePipes(new ValidationPipe())

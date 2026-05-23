@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { RegisterService } from '../service/register.service';
 import { registrationDTO } from 'src/dtos/auth/registration.dto';
 import { UsersEntity } from 'src/entities/users.entity';

@@ -23,13 +23,13 @@ export class MembersEntity {
 
   @ManyToOne(() => MessesEntity, (mess) => mess.id)
   @JoinColumn({
-    name : 'mess_id'
+    name: 'mess_id',
   })
-  mess : MessesEntity;
+  mess: MessesEntity;
 
   @ManyToOne(() => UsersEntity, (user) => user.id)
   @JoinColumn({
-    name : 'user_id'
+    name: 'user_id',
   })
   user: UsersEntity;
 
@@ -63,11 +63,11 @@ export class MembersEntity {
   updated_at: Timestamp;
 
   @OneToMany(() => MealExpenseIterationsEntity, (meal) => meal.member)
-  meal_expense : MealExpenseIterationsEntity[];
+  meal_expense: MealExpenseIterationsEntity[];
 
   @OneToMany(() => MealsEntity, (meal) => meal.member)
-  meals : MealsEntity[];
+  meals: MealsEntity[];
 
   @OneToMany(() => NoticesEntity, (notice) => notice.member)
-  notices : NoticesEntity[];
+  notices: NoticesEntity[];
 }

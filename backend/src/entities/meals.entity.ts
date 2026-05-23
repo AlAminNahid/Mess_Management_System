@@ -17,12 +17,12 @@ export class MealsEntity {
 
   @ManyToOne(() => MembersEntity, (member) => member.meals)
   @JoinColumn({
-    name : 'member_id'
+    name: 'member_id',
   })
-  member : MembersEntity;
+  member: MembersEntity;
 
   @CreateDateColumn({
-    type : 'timestamp'
+    type: 'timestamp',
   })
   date: Timestamp;
 
@@ -33,7 +33,7 @@ export class MealsEntity {
   meal_count: number;
 
   @Column()
-  manager_id : number;
+  manager_id: number;
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -6,7 +6,7 @@ import {
   ManyToOne,
   Timestamp,
   UpdateDateColumn,
-  JoinColumn
+  JoinColumn,
 } from 'typeorm';
 import { MessesEntity } from './messes.entity';
 
@@ -17,14 +17,14 @@ export class UtilityCostsEntity {
 
   @ManyToOne(() => MessesEntity, (mess) => mess.utility_costs)
   @JoinColumn({
-    name : 'mess_id'
+    name: 'mess_id',
   })
-  mess : MessesEntity;
+  mess: MessesEntity;
 
   @CreateDateColumn({
-    type : 'timestamp'
+    type: 'timestamp',
   })
-  date : Timestamp;
+  date: Timestamp;
 
   @Column({
     type: 'decimal',
@@ -62,9 +62,9 @@ export class UtilityCostsEntity {
   gas: number;
 
   @Column({
-    type: 'int'
+    type: 'int',
   })
-  manager_id : number;
+  manager_id: number;
 
   @CreateDateColumn({
     type: 'timestamp',
