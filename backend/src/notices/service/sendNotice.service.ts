@@ -1,13 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
-import { MessesEntity } from 'src/entities/messes.entity';
 import { NoticesEntity } from 'src/entities/notices.enitity';
 import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class NoticesService {
+export class SendNoticeService {
   constructor(
     @InjectRepository(MembersEntity)
     private memberRepository: Repository<MembersEntity>,
@@ -15,8 +14,6 @@ export class NoticesService {
     private userRepository: Repository<UsersEntity>,
     @InjectRepository(NoticesEntity)
     private noticeRepository: Repository<NoticesEntity>,
-    @InjectRepository(MessesEntity)
-    private messRepository: Repository<MessesEntity>,
   ) {}
 
   async sendNotice(
@@ -40,10 +37,10 @@ export class NoticesService {
     }
 
     const notice = await this.noticeRepository.create({
-      title: title,
-      description: description,
-      notice_type: notice_type,
-      member: member,
+      title,
+      description,
+      notice_type,
+      member,
     });
 
     await this.noticeRepository.save(notice);
@@ -55,47 +52,6 @@ export class NoticesService {
       date: notice.posted_date,
       notice_type: notice.notice_type,
       sended_by: user.name,
-    };
-  }
-
-  async getNotices(messID: number, userID: number) {
-    const user = await this.userRepository.findOne({
-      where: { id: userID },
-    });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const mess = await this.messRepository.findOne({
-      where: { id: messID },
-    });
-    if (!mess) {
-      throw new NotFoundException('Mess not found');
-    }
-
-    const notices = await this.noticeRepository.find({
-      select: {
-        title: true,
-        description: true,
-        notice_type: true,
-        posted_date: true,
-        member: { id: true, mess: { name: true, address: true } },
-      },
-      relations: {
-        member: {
-          mess: true,
-        },
-      },
-      where: {
-        member: {
-          mess: { id: messID },
-        },
-      },
-    });
-
-    return {
-      message: 'All the notices',
-      notices,
     };
   }
 }
