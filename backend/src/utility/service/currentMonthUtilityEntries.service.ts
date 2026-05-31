@@ -6,7 +6,7 @@ import { UtilityCostsEntity } from 'src/entities/utility_costs.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class CurrentMonthUtilityBillsService {
+export class CurrentMonthUtilityEntriesService {
   constructor(
     @InjectRepository(UtilityCostsEntity)
     private utilityCostsRepository: Repository<UtilityCostsEntity>,
@@ -16,7 +16,7 @@ export class CurrentMonthUtilityBillsService {
     private memberRepository: Repository<MembersEntity>,
   ) {}
 
-  async getCurrentMonthUtilityBills(messID: number, userID: number) {
+  async getCurrentMonthUtilityEntries(messID: number, userID: number) {
     const managerMember = await this.memberRepository.findOne({
       where: { user: { id: userID }, is_active: true },
       relations: ['mess'],
@@ -33,15 +33,17 @@ export class CurrentMonthUtilityBillsService {
       throw new NotFoundException('Mess not found');
     }
     if (mess.id !== managerMember.mess.id) {
-      throw new ForbiddenException('This utility bill does not belong to your mess');
+      throw new ForbiddenException('This utility entry does not belong to your mess');
     }
 
-    const result = await this.utilityCostsRepository
+    const entries = await this.utilityCostsRepository
       .createQueryBuilder('utilityCost')
-      .select('COALESCE(SUM(utilityCost.electricity), 0)', 'electricity')
-      .addSelect('COALESCE(SUM(utilityCost.internet), 0)', 'internet')
-      .addSelect('COALESCE(SUM(utilityCost.gas), 0)', 'gas')
-      .addSelect('COALESCE(SUM(utilityCost.maid), 0)', 'maid')
+      .select('utilityCost.id', 'id')
+      .addSelect('utilityCost.date', 'date')
+      .addSelect('utilityCost.electricity', 'electricity')
+      .addSelect('utilityCost.internet', 'internet')
+      .addSelect('utilityCost.gas', 'gas')
+      .addSelect('utilityCost.maid', 'maid')
       .where('utilityCost.mess_id = :messID', { messID })
       .andWhere(
         "((utilityCost.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') >= DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka')",
@@ -49,35 +51,43 @@ export class CurrentMonthUtilityBillsService {
       .andWhere(
         "((utilityCost.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') < DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + INTERVAL '1 month'",
       )
-      .getRawOne();
-
-    const electricity = Number(result.electricity) || 0;
-    const internet = Number(result.internet) || 0;
-    const gas = Number(result.gas) || 0;
-    const maid = Number(result.maid) || 0;
+      .orderBy('utilityCost.date', 'DESC')
+      .getRawMany();
 
     return {
       mess_id: mess.id,
       mess_name: mess.name,
-      month: this.currentMonthInBangladesh(),
-      electricity,
-      internet,
-      gas,
-      maid,
-      totalUtilityBill: electricity + internet + gas + maid,
+      entries: entries.map((entry) => {
+        const electricity = Number(entry.electricity) || 0;
+        const internet = Number(entry.internet) || 0;
+        const gas = Number(entry.gas) || 0;
+        const maid = Number(entry.maid) || 0;
+
+        return {
+          id: Number(entry.id),
+          date: this.formatDateInBangladesh(entry.date),
+          electricity,
+          internet,
+          gas,
+          maid,
+          total: electricity + internet + gas + maid,
+        };
+      }),
     };
   }
 
-  private currentMonthInBangladesh() {
+  private formatDateInBangladesh(date: Date) {
     const parts = new Intl.DateTimeFormat('en', {
       timeZone: 'Asia/Dhaka',
       year: 'numeric',
       month: '2-digit',
-    }).formatToParts(new Date());
+      day: '2-digit',
+    }).formatToParts(new Date(date));
 
     const year = parts.find((part) => part.type === 'year')?.value;
     const month = parts.find((part) => part.type === 'month')?.value;
+    const day = parts.find((part) => part.type === 'day')?.value;
 
-    return `${year}-${month}`;
+    return `${year}-${month}-${day}`;
   }
 }

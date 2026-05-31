@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -14,9 +14,10 @@ export class CurrentMonthUtilityBillsController {
   ) {}
 
   @Get('currentMonthUtilityBills/:messID')
-  getCurrentMonthUtilityBills(@Param('messID') messID: number) {
+  getCurrentMonthUtilityBills(@Param('messID') messID: number, @Request() req) {
     return this.currentMonthUtilityBillsService.getCurrentMonthUtilityBills(
       messID,
+      req.user.userID,
     );
   }
 }

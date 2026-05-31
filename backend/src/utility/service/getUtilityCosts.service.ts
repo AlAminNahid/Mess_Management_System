@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { UtilityCostsEntity } from 'src/entities/utility_costs.entity';
 import { Repository } from 'typeorm';
@@ -11,15 +12,28 @@ export class GetUtilityCostsService {
     private utilityCostsRepository: Repository<UtilityCostsEntity>,
     @InjectRepository(MessesEntity)
     private messRepository: Repository<MessesEntity>,
+    @InjectRepository(MembersEntity)
+    private memberRepository: Repository<MembersEntity>,
   ) {}
 
-  async getUtilityCosts(messID: number) {
+  async getUtilityCosts(messID: number, userID: number) {
+    const managerMember = await this.memberRepository.findOne({
+      where: { user: { id: userID }, is_active: true },
+      relations: ['mess'],
+    });
+    if (!managerMember) {
+      throw new NotFoundException('Manager is not an active member of any mess');
+    }
+
     const mess = await this.messRepository.findOne({
       where: { id: messID },
     });
 
     if (!mess) {
       throw new NotFoundException('Mess not found');
+    }
+    if (mess.id !== managerMember.mess.id) {
+      throw new ForbiddenException('This utility cost does not belong to your mess');
     }
 
     const result = await this.utilityCostsRepository
@@ -29,9 +43,11 @@ export class GetUtilityCostsService {
       .addSelect('COALESCE(SUM(utilityCost.gas), 0)', 'gas')
       .addSelect('COALESCE(SUM(utilityCost.maid), 0)', 'maid')
       .where('utilityCost.mess_id = :messID', { messID })
-      .andWhere("utilityCost.created_at >= DATE_TRUNC('month', CURRENT_DATE)")
       .andWhere(
-        "utilityCost.created_at < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'",
+        "((utilityCost.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') >= DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka')",
+      )
+      .andWhere(
+        "((utilityCost.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') < DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + INTERVAL '1 month'",
       )
       .getRawOne();
 
@@ -43,12 +59,25 @@ export class GetUtilityCostsService {
     return {
       mess_id: mess.id,
       mess_name: mess.name,
-      month: new Date().toISOString().slice(0, 7),
+      month: this.currentMonthInBangladesh(),
       electricity,
       internet,
       gas,
       maid,
       totalUtilityCost: electricity + internet + gas + maid,
     };
+  }
+
+  private currentMonthInBangladesh() {
+    const parts = new Intl.DateTimeFormat('en', {
+      timeZone: 'Asia/Dhaka',
+      year: 'numeric',
+      month: '2-digit',
+    }).formatToParts(new Date());
+
+    const year = parts.find((part) => part.type === 'year')?.value;
+    const month = parts.find((part) => part.type === 'month')?.value;
+
+    return `${year}-${month}`;
   }
 }

@@ -36,6 +36,7 @@ export class UpdateMealExpensesController {
       info.amount,
       info.description,
       info.member_id,
+      info.date,
       userID,
     );
   }

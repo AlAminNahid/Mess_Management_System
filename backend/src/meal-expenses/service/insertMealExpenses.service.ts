@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MealExpenseIterationsEntity } from 'src/entities/meal_expense_iterations.entity';
 import { MembersEntity } from 'src/entities/members.entity';
@@ -20,13 +20,26 @@ export class InsertMealExpensesService {
     amount: number,
     description: string,
     memberID: number,
+    date: string,
     userID: number,
   ) {
+    const managerMember = await this.memberRepository.findOne({
+      relations: { mess: true },
+      where: { user: { id: userID }, is_active: true },
+    });
+    if (!managerMember) {
+      throw new NotFoundException('Manager is not an active member of any mess');
+    }
+
     const memberInfo = await this.memberRepository.findOne({
+      relations: { mess: true },
       where: { id: memberID },
     });
     if (!memberInfo) {
       throw new NotFoundException('Member not found');
+    }
+    if (memberInfo.mess.id !== managerMember.mess.id) {
+      throw new ForbiddenException('Member does not belong to your mess');
     }
 
     const user = await this.userRepository.findOne({
@@ -41,6 +54,7 @@ export class InsertMealExpensesService {
       manager_id: userID,
       amount,
       description,
+      date: new Date(date ?? new Date()) as any,
     });
 
     await this.mealExpenseRepository.save(mealExpense);

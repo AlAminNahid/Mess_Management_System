@@ -1,4 +1,11 @@
-import { IsInt, IsNumber, IsPositive, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class mealExpenseInsertDTO {
   @IsNumber()
@@ -17,4 +24,8 @@ export class mealExpenseInsertDTO {
     message: `ID number can't be negative`,
   })
   member_id: number;
+
+  @IsOptional()
+  @IsDateString()
+  date: string;
 }

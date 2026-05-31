@@ -34,9 +34,11 @@ export class TotalMealExpenseService {
       .leftJoin('member.mess', 'mess')
       .select('SUM(expense.amount)', 'totalExpense')
       .where('mess.id = :messID', { messID })
-      .andWhere("expense.date >= DATE_TRUNC('month', CURRENT_DATE)")
       .andWhere(
-        "expense.date < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'",
+        "((expense.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') >= DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka')",
+      )
+      .andWhere(
+        "((expense.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') < DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + INTERVAL '1 month'",
       )
       .getRawOne();
 

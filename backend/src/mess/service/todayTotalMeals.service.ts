@@ -27,22 +27,37 @@ export class TodayTotalMealsService {
 
     const messID = member.mess.id;
 
-    const today = new Date().toISOString().split('T')[0];
-
     const result = await this.mealRepository
       .createQueryBuilder('meal')
       .leftJoin('meal.member', 'member')
       .leftJoin('member.mess', 'mess')
       .select('SUM(meal.meal_count)', 'todayTotalMeals')
       .where('mess.id = :messID', { messID })
-      .andWhere('DATE(meal.created_at) = :today', { today })
+      .andWhere(
+        "DATE((meal.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') = DATE(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka')",
+      )
       .getRawOne();
 
     return {
       messID,
       messName: member.mess.name,
-      date: today,
+      date: this.currentDateInBangladesh(),
       todayTotalMeals: Number(result.todayTotalMeals) || 0,
     };
+  }
+
+  private currentDateInBangladesh() {
+    const parts = new Intl.DateTimeFormat('en', {
+      timeZone: 'Asia/Dhaka',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date());
+
+    const year = parts.find((part) => part.type === 'year')?.value;
+    const month = parts.find((part) => part.type === 'month')?.value;
+    const day = parts.find((part) => part.type === 'day')?.value;
+
+    return `${year}-${month}-${day}`;
   }
 }
