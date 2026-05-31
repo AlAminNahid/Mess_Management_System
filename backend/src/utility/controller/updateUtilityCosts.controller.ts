@@ -34,7 +34,6 @@ export class UpdateUtilityCostsController {
     return this.updateUtilityCostsService.updateUtilityCosts(
       utilityCostID,
       info.mess_id,
-      info.rent,
       info.electricity,
       info.internet,
       info.gas,

@@ -34,6 +34,10 @@ export class TotalMealExpenseService {
       .leftJoin('member.mess', 'mess')
       .select('SUM(expense.amount)', 'totalExpense')
       .where('mess.id = :messID', { messID })
+      .andWhere("expense.date >= DATE_TRUNC('month', CURRENT_DATE)")
+      .andWhere(
+        "expense.date < DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month'",
+      )
       .getRawOne();
 
     return {

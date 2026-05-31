@@ -31,13 +31,6 @@ export class UtilityCostsEntity {
     precision: 10,
     scale: 2,
   })
-  rent: number;
-
-  @Column({
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-  })
   internet: number;
 
   @Column({

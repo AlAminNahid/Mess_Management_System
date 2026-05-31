@@ -27,6 +27,13 @@ export class MealsEntity {
   date: Timestamp;
 
   @Column({
+    type: 'varchar',
+    length: 20,
+    default: 'Lunch',
+  })
+  meal_type: string;
+
+  @Column({
     type: 'int',
     default: 0,
   })

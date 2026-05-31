@@ -33,6 +33,8 @@ export class UpdateMealsController {
       mealID,
       info.meal_count,
       info.member_id,
+      info.meal_type,
+      info.date,
       userID,
     );
   }

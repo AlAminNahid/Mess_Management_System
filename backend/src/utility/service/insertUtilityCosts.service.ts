@@ -18,7 +18,6 @@ export class InsertUtilityCostsService {
 
   async insertUtiltyCosts(
     messID: number,
-    rent: number,
     electricity: number,
     internet: number,
     gas: number,
@@ -41,7 +40,6 @@ export class InsertUtilityCostsService {
 
     const utilityCosts = await this.utilityCostsRepository.create({
       mess,
-      rent,
       electricity,
       internet,
       gas,
@@ -55,7 +53,6 @@ export class InsertUtilityCostsService {
       message: 'Utility cost is inserted successfully',
       mess_name: mess.name,
       mess_address: mess.address,
-      rent: utilityCosts.rent,
       internet: utilityCosts.internet,
       electricity: utilityCosts.electricity,
       gas: utilityCosts.gas,

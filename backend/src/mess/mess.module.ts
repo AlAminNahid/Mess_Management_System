@@ -21,6 +21,8 @@ import { AllMessesController } from './controller/allMesses.controller';
 import { AllMessesService } from './service/allMesses.service';
 import { TotalMealExpenseController } from './controller/totalMealExpense.controller';
 import { TotalMealExpenseService } from './service/totalMealExpense.service';
+import { CurrentMessMembersController } from './controller/currentMessMembers.controller';
+import { CurrentMessMembersService } from './service/currentMessMembers.service';
 
 @Module({
   imports: [
@@ -41,6 +43,7 @@ import { TotalMealExpenseService } from './service/totalMealExpense.service';
     MessStatisticsController,
     AllMessesController,
     TotalMealExpenseController,
+    CurrentMessMembersController,
   ],
   providers: [
     CreateMessService,
@@ -51,6 +54,7 @@ import { TotalMealExpenseService } from './service/totalMealExpense.service';
     MessStatisticsService,
     AllMessesService,
     TotalMealExpenseService,
+    CurrentMessMembersService,
   ],
 })
 export class MessModule {}

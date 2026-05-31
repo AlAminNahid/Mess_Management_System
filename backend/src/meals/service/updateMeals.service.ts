@@ -20,6 +20,8 @@ export class UpdateMealsService {
     mealID: number,
     mealCount: number,
     memberID: number,
+    mealType: string,
+    date: string,
     userID: number,
   ) {
     const user = await this.userRepository.findOne({
@@ -44,6 +46,8 @@ export class UpdateMealsService {
     }
 
     existingMeal.meal_count = mealCount;
+    existingMeal.meal_type = mealType ?? existingMeal.meal_type;
+    existingMeal.date = new Date(date ?? existingMeal.date) as any;
     existingMeal.member = memberInfo;
     existingMeal.manager_id = userID;
 
@@ -53,6 +57,7 @@ export class UpdateMealsService {
       message: 'Meal updated successfully',
       member_id: memberInfo.id,
       date: existingMeal.date,
+      meal_type: existingMeal.meal_type,
       meal_count: existingMeal.meal_count,
       manager_name: user.name,
     };

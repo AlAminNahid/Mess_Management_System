@@ -33,6 +33,28 @@ export class SharedService {
     return user;
   }
 
+  async updateUserProfile(userID: number, name: string, phone: string) {
+    const user = await this.userRepository.findOne({
+      where: { id: userID },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.name = name;
+    user.phone = phone;
+
+    await this.userRepository.save(user);
+
+    return {
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      nid: user.nid,
+    };
+  }
+
   async getMessByUserID(userID: string) {
     const member = await this.membersRepository.findOne({
       where: {

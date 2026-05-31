@@ -1,4 +1,4 @@
-import { IsInt, IsNumber, IsPositive } from 'class-validator';
+import { IsInt, IsNumber, IsPositive, Min } from 'class-validator';
 
 export class utilityCostDTO {
   @IsInt()
@@ -6,22 +6,18 @@ export class utilityCostDTO {
   mess_id: number;
 
   @IsNumber()
-  @IsPositive()
-  rent: number;
-
-  @IsNumber()
-  @IsPositive()
+  @Min(0)
   internet: number;
 
   @IsNumber()
-  @IsPositive()
+  @Min(0)
   electricity: number;
 
   @IsNumber()
-  @IsPositive()
+  @Min(0)
   maid: number;
 
   @IsNumber()
-  @IsPositive()
+  @Min(0)
   gas: number;
 }

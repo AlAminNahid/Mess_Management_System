@@ -27,6 +27,8 @@ export class InsertMealsController {
     return this.insertMealsService.insertMeals(
       info.meal_count,
       info.member_id,
+      info.meal_type,
+      info.date,
       userID,
     );
   }

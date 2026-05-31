@@ -24,8 +24,7 @@ export class GetUtilityCostsService {
 
     const result = await this.utilityCostsRepository
       .createQueryBuilder('utilityCost')
-      .select('COALESCE(SUM(utilityCost.rent), 0)', 'rent')
-      .addSelect('COALESCE(SUM(utilityCost.electricity), 0)', 'electricity')
+      .select('COALESCE(SUM(utilityCost.electricity), 0)', 'electricity')
       .addSelect('COALESCE(SUM(utilityCost.internet), 0)', 'internet')
       .addSelect('COALESCE(SUM(utilityCost.gas), 0)', 'gas')
       .addSelect('COALESCE(SUM(utilityCost.maid), 0)', 'maid')
@@ -36,7 +35,6 @@ export class GetUtilityCostsService {
       )
       .getRawOne();
 
-    const rent = Number(result.rent) || 0;
     const electricity = Number(result.electricity) || 0;
     const internet = Number(result.internet) || 0;
     const gas = Number(result.gas) || 0;
@@ -46,12 +44,11 @@ export class GetUtilityCostsService {
       mess_id: mess.id,
       mess_name: mess.name,
       month: new Date().toISOString().slice(0, 7),
-      rent,
       electricity,
       internet,
       gas,
       maid,
-      totalUtilityCost: rent + electricity + internet + gas + maid,
+      totalUtilityCost: electricity + internet + gas + maid,
     };
   }
 }

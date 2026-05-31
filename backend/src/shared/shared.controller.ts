@@ -1,8 +1,19 @@
-import { Get, Controller, UseGuards, Param, Request } from '@nestjs/common';
+import {
+  Body,
+  Get,
+  Controller,
+  Patch,
+  UseGuards,
+  Param,
+  Request,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { UserRole } from 'src/dtos/auth/role.enum';
+import { UserProfileUpdateDTO } from 'src/dtos/user_profile_update.dto';
 import { SharedService } from './shared.service';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -13,6 +24,14 @@ export class SharedController {
   @Get('userById/:userID')
   getUserById(@Param('userID') userID: string) {
     return this.sharedService.getUserById(userID);
+  }
+
+  @Roles(UserRole.MANAGER, UserRole.MEMBER, UserRole.USER)
+  @Patch('userProfile')
+  @UsePipes(new ValidationPipe())
+  updateUserProfile(@Body() info: UserProfileUpdateDTO, @Request() req) {
+    const userID = req.user.userID;
+    return this.sharedService.updateUserProfile(userID, info.name, info.phone);
   }
 
   @Roles(UserRole.MANAGER, UserRole.MEMBER)

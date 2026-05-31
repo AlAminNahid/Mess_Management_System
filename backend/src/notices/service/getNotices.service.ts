@@ -37,10 +37,16 @@ export class GetNoticesService {
         description: true,
         notice_type: true,
         posted_date: true,
-        member: { id: true, mess: { name: true, address: true } },
+        member: {
+          id: true,
+          role: true,
+          user: { id: true, name: true },
+          mess: { name: true, address: true },
+        },
       },
       relations: {
         member: {
+          user: true,
           mess: true,
         },
       },

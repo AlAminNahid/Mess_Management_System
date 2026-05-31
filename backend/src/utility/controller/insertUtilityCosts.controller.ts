@@ -28,7 +28,6 @@ export class InsertUtilityCostsController {
     const userID = req.user.userID;
     return this.insertUtilityCostsService.insertUtiltyCosts(
       info.mess_id,
-      info.rent,
       info.electricity,
       info.internet,
       info.gas,

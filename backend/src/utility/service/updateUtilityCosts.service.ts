@@ -19,7 +19,6 @@ export class UpdateUtilityCostsService {
   async updateUtilityCosts(
     utilityCostID: number,
     messID: number,
-    rent: number,
     electricity: number,
     internet: number,
     gas: number,
@@ -47,7 +46,6 @@ export class UpdateUtilityCostsService {
       throw new NotFoundException('Mess not found');
     }
 
-    existingUtilityCosts.rent = rent;
     existingUtilityCosts.electricity = electricity;
     existingUtilityCosts.internet = internet;
     existingUtilityCosts.gas = gas;
@@ -59,7 +57,6 @@ export class UpdateUtilityCostsService {
       message: 'Utility cost is updated successfully',
       mess_name: mess.name,
       mess_address: mess.address,
-      rent: existingUtilityCosts.rent,
       internet: existingUtilityCosts.internet,
       electricity: existingUtilityCosts.electricity,
       gas: existingUtilityCosts.gas,
