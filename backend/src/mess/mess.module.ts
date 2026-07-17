@@ -25,6 +25,8 @@ import { CurrentMessMembersController } from './controller/currentMessMembers.co
 import { CurrentMessMembersService } from './service/currentMessMembers.service';
 import { MonthlySheetController } from './controller/monthlySheet.controller';
 import { MonthlySheetService } from './service/monthlySheet.service';
+import { MessPasswordController } from './controller/messPassword.controller';
+import { MessPasswordService } from './service/messPassword.service';
 
 @Module({
   imports: [
@@ -47,6 +49,7 @@ import { MonthlySheetService } from './service/monthlySheet.service';
     TotalMealExpenseController,
     CurrentMessMembersController,
     MonthlySheetController,
+    MessPasswordController,
   ],
   providers: [
     CreateMessService,
@@ -59,6 +62,7 @@ import { MonthlySheetService } from './service/monthlySheet.service';
     TotalMealExpenseService,
     CurrentMessMembersService,
     MonthlySheetService,
+    MessPasswordService,
   ],
 })
 export class MessModule {}

@@ -36,3 +36,25 @@ export class JoinMessDTO {
   })
   password: string;
 }
+
+export class ViewMessPasswordDTO {
+  @IsString()
+  @IsNotEmpty({
+    message: `Account password can't be empty.`,
+  })
+  accountPassword: string;
+}
+
+export class ChangeMessPasswordDTO {
+  @IsString()
+  @IsNotEmpty({
+    message: `Account password can't be empty.`,
+  })
+  accountPassword: string;
+
+  @IsString()
+  @MinLength(6, {
+    message: `New mess password must be at least 6 characters.`,
+  })
+  newMessPassword: string;
+}

@@ -3,12 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { encryptMessPassword } from '../mess-password.util';
 
 @Injectable()
 export class CreateMessService {
@@ -19,6 +20,7 @@ export class CreateMessService {
     private memberRepository: Repository<MembersEntity>,
     @InjectRepository(MessesEntity)
     private messRepository: Repository<MessesEntity>,
+    private config: ConfigService,
   ) {}
 
   async createMess(
@@ -34,13 +36,15 @@ export class CreateMessService {
       );
     }
 
-    const salt = await bcrypt.genSalt();
-    const hashPassword = await bcrypt.hash(password, salt);
+    const encryptedPassword = encryptMessPassword(
+      password,
+      this.config.get<string>('MESS_PASSWORD_ENCRYPTION_KEY')!,
+    );
 
     const messInfo = await this.messRepository.create({
       name,
       address,
-      password: hashPassword,
+      password: encryptedPassword,
     });
     await this.messRepository.save(messInfo);
 

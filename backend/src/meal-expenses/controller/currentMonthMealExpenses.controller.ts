@@ -6,7 +6,7 @@ import { UserRole } from 'src/dtos/auth/role.enum';
 import { CurrentMonthMealExpensesService } from '../service/currentMonthMealExpenses.service';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles(UserRole.MANAGER)
+@Roles(UserRole.MANAGER, UserRole.MEMBER)
 @Controller('meal_expenses')
 export class CurrentMonthMealExpensesController {
   constructor(

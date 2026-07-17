@@ -4,12 +4,13 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { decryptMessPassword } from '../mess-password.util';
 
 @Injectable()
 export class JoinMessService {
@@ -20,6 +21,7 @@ export class JoinMessService {
     private memberRepository: Repository<MembersEntity>,
     @InjectRepository(MessesEntity)
     private messRepository: Repository<MessesEntity>,
+    private config: ConfigService,
   ) {}
 
   async joinMess(name: string, password: string, userID: number) {
@@ -30,10 +32,13 @@ export class JoinMessService {
       throw new UnauthorizedException('Invalid mess name or password');
     }
 
-    const passwordMatches = await bcrypt.compare(
-      password,
-      mess_info.password,
-    );
+    const key = this.config.get<string>('MESS_PASSWORD_ENCRYPTION_KEY')!;
+    let passwordMatches = false;
+    try {
+      passwordMatches = decryptMessPassword(mess_info.password, key) === password;
+    } catch {
+      passwordMatches = false;
+    }
     if (!passwordMatches) {
       throw new UnauthorizedException('Invalid mess name or password');
     }

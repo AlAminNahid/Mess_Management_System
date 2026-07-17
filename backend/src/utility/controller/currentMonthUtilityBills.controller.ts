@@ -6,7 +6,7 @@ import { UserRole } from 'src/dtos/auth/role.enum';
 import { CurrentMonthUtilityBillsService } from '../service/currentMonthUtilityBills.service';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles(UserRole.MANAGER)
+@Roles(UserRole.MANAGER, UserRole.MEMBER)
 @Controller('utility_cost')
 export class CurrentMonthUtilityBillsController {
   constructor(
