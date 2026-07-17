@@ -20,6 +20,11 @@ export class CreateMessController {
   @UsePipes(new ValidationPipe())
   createMess(@Body() info: CreateMessDTO, @Request() req) {
     const userID = req.user.userID;
-    return this.createMessService.createMess(info.name, info.address, userID);
+    return this.createMessService.createMess(
+      info.name,
+      info.address,
+      info.password,
+      userID,
+    );
   }
 }

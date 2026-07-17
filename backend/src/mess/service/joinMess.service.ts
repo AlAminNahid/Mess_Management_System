@@ -2,12 +2,14 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class JoinMessService {
@@ -20,12 +22,20 @@ export class JoinMessService {
     private messRepository: Repository<MessesEntity>,
   ) {}
 
-  async joinMess(messID: number, userID: number) {
+  async joinMess(name: string, password: string, userID: number) {
     const mess_info = await this.messRepository.findOne({
-      where: { id: messID },
+      where: { name },
     });
     if (!mess_info) {
-      throw new NotFoundException('Mess not found');
+      throw new UnauthorizedException('Invalid mess name or password');
+    }
+
+    const passwordMatches = await bcrypt.compare(
+      password,
+      mess_info.password,
+    );
+    if (!passwordMatches) {
+      throw new UnauthorizedException('Invalid mess name or password');
     }
 
     const user_info = await this.usersRepository.findOne({
@@ -35,12 +45,10 @@ export class JoinMessService {
       throw new NotFoundException('User not found');
     }
 
-    console.log(userID);
-
     const existing_member = await this.memberRepository.findOne({
       where: {
         user: { id: userID },
-        mess: { id: messID },
+        mess: { id: mess_info.id },
       },
       relations: ['user', 'mess'],
     });

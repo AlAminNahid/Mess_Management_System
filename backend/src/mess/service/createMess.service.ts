@@ -8,6 +8,7 @@ import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CreateMessService {
@@ -20,7 +21,12 @@ export class CreateMessService {
     private messRepository: Repository<MessesEntity>,
   ) {}
 
-  async createMess(name: string, address: string, userID: number) {
+  async createMess(
+    name: string,
+    address: string,
+    password: string,
+    userID: number,
+  ) {
     const existing = await this.messRepository.findOne({ where: { name } });
     if (existing) {
       throw new BadRequestException(
@@ -28,9 +34,13 @@ export class CreateMessService {
       );
     }
 
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(password, salt);
+
     const messInfo = await this.messRepository.create({
       name,
       address,
+      password: hashPassword,
     });
     await this.messRepository.save(messInfo);
 

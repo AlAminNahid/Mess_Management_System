@@ -29,6 +29,11 @@ export class MessesEntity {
   address: string;
 
   @Column({
+    type: 'varchar',
+  })
+  password: string;
+
+  @Column({
     type: 'enum',
     enum: [true, false],
     default: true,
