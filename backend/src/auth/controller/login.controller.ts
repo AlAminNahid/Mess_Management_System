@@ -6,13 +6,18 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { LoginService } from '../service/login.service';
 import { loginDTO } from 'src/dtos/auth/login.dto';
 import type { Response } from 'express';
+import { setAuthCookies } from '../cookie.util';
 
 @Controller('auth')
 export class LoginController {
-  constructor(private readonly loginService: LoginService) {}
+  constructor(
+    private readonly loginService: LoginService,
+    private readonly config: ConfigService,
+  ) {}
 
   @Post('login')
   @UsePipes(new ValidationPipe())
@@ -22,14 +27,14 @@ export class LoginController {
   ) {
     const loginData = await this.loginService.login(info.email, info.password);
 
-    res.cookie('access_token', loginData.access_token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-      expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    });
+    setAuthCookies(
+      res,
+      this.config,
+      loginData.access_token,
+      loginData.refresh_token,
+    );
 
-    const { access_token, ...userData } = loginData;
+    const { access_token, refresh_token, ...userData } = loginData;
     return userData;
   }
 }

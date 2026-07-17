@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from './data-source';
 import { AuthModule } from './auth/auth.module';
@@ -12,6 +13,7 @@ import { NoticesModule } from './notices/notices.module';
 const db = new DataSource();
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: db.type,
       host: db.host,

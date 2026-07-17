@@ -3,7 +3,8 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { UsersEntity } from 'src/entities/users.entity';
@@ -18,7 +19,29 @@ export class LoginService {
     @InjectRepository(MembersEntity)
     private memberRepository: Repository<MembersEntity>,
     private jwtService: JwtService,
+    private config: ConfigService,
   ) {}
+
+  private async issueTokens(user: UsersEntity, member: MembersEntity | null) {
+    const accessPayload = {
+      sub: user.id,
+      email: user.email,
+      type: 'access',
+      ...(member ? { memberID: member.id, role: member.role } : {}),
+    };
+    const access_token = await this.jwtService.signAsync(accessPayload);
+
+    const refreshPayload = { sub: user.id, type: 'refresh' };
+    const refresh_token = await this.jwtService.signAsync(refreshPayload, {
+      secret: this.config.get<string>('JWT_REFRESH_SECRET'),
+      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d'),
+    } as JwtSignOptions);
+
+    user.hashedRefreshToken = await bcrypt.hash(refresh_token, 10);
+    await this.usersRepository.save(user);
+
+    return { access_token, refresh_token };
+  }
 
   async login(email: string, password: string) {
     const user = await this.usersRepository.findOne({ where: { email } });
@@ -36,15 +59,16 @@ export class LoginService {
     const member = await this.memberRepository.findOne({
       where: { user: { id: user.id }, is_active: true },
     });
-    if (!member) {
-      const payload = {
-        sub: user.id,
-        email: user.email,
-      };
-      const token = await this.jwtService.signAsync(payload);
 
+    const { access_token, refresh_token } = await this.issueTokens(
+      user,
+      member,
+    );
+
+    if (!member) {
       return {
-        access_token: token,
+        access_token,
+        refresh_token,
         message:
           'You are not in any mess. Would you like to join one or create one?',
         user: {
@@ -55,17 +79,9 @@ export class LoginService {
       };
     }
 
-    const payload = {
-      sub: user.id,
-      email: user.email,
-      memberID: member.id,
-      role: member.role,
-    };
-
-    const token = await this.jwtService.signAsync(payload);
-
     return {
-      access_token: token,
+      access_token,
+      refresh_token,
       user: {
         id: user.id,
         name: user.name,

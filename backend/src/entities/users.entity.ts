@@ -50,6 +50,12 @@ export class UsersEntity {
   })
   avater: string;
 
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  hashedRefreshToken: string | null;
+
   @CreateDateColumn()
   created_at: string;
 

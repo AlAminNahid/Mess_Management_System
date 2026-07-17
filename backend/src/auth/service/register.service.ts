@@ -37,7 +37,7 @@ export class RegisterService {
 
       console.log('Users registration successful');
 
-      const { password: _, ...result } = user as any;
+      const { password: _, hashedRefreshToken: __, ...result } = user as any;
       return result;
     } catch (error: any) {
       if (error.code === '23505') {
