@@ -18,7 +18,7 @@ export class CurrentMessMembersService {
       where: { user: { id: userID }, is_active: true },
     });
     if (!managerMember) {
-      throw new NotFoundException('Manager is not an active member of any mess');
+      throw new NotFoundException('User is not an active member of any mess');
     }
 
     const members = await this.memberRepository.find({

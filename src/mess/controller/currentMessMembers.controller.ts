@@ -6,7 +6,7 @@ import { UserRole } from 'src/dtos/auth/role.enum';
 import { CurrentMessMembersService } from '../service/currentMessMembers.service';
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles(UserRole.MANAGER)
+@Roles(UserRole.MANAGER, UserRole.MEMBER)
 @Controller('mess')
 export class CurrentMessMembersController {
   constructor(
