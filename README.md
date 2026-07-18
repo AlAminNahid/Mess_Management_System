@@ -1,43 +1,103 @@
-# 🍲 Mess Management System
+# MessMasterApp — Backend
 
-## 📌 Introduction
-The **Mess Management System** is a dedicated platform designed for bachelors to streamline the management of shared meal systems. It automates the tracking of daily meals, shared expenses, and communal utility costs.
+The backend API for **MessMasterApp**, an Android application designed to help bachelors manage shared meal systems. Built with NestJS and PostgreSQL, it handles meal tracking, shared expenses, utility costs, and mess-wide communication.
 
-## 🚀 Workflow: Onboarding & Logic
-When a user logs into the system, the following logic applies:
-* **Membership Check**: The system verifies if the user is already part of a mess.
-* **New Users**: If not a member, the user can either **Create a Mess** or **Join a Mess**.
-* **Creating a Mess**: The user provides mess information and is automatically assigned the role of **Manager**.
-* **Joining a Mess**: The user enters a `mess_id` to join an existing setup as a **Member**.
+## Tech Stack
 
-## 👥 User Roles & Permissions
-The system maintains a clear distinction between the Manager (administrative) and Member roles to ensure financial transparency.
+- **Framework**: NestJS (Node.js)
+- **Language**: TypeScript
+- **Database**: PostgreSQL with TypeORM
+- **Auth**: JWT (Access + Refresh tokens) with Passport
+- **Other**: bcrypt, nodemailer, cookie-parser
 
-| Feature | Manager 👑 | Member 👤 | Method |
-| :--- | :---: | :---: | :---: |
-| Insert/Update Meals | ✅ | ❌ | POST/PUT |
-| Manage Meal Expenses | ✅ | ❌ | POST/PUT |
-| Manage Utility Costs | ✅ | ❌ | POST/PUT |
-| Post Announcements | ✅ | ❌ | POST |
-| Post Shopping Requests | ✅ | ✅ | POST |
-| View All Mess Notices | ✅ | ✅ | GET |
+## Workflow: Onboarding & Logic
 
-## 📊 Database Architecture
-The application architecture is centered around a relational database designed to track complex shared finances.
+When a user logs in, the following logic applies:
 
+- **Membership Check**: The system verifies if the user is already part of a mess.
+- **New Users**: If not a member, the user can either **Create a Mess** or **Join a Mess**.
+- **Creating a Mess**: The user provides mess details and is automatically assigned the role of **Manager**.
+- **Joining a Mess**: The user enters a `mess_id` to join an existing mess as a **Member**.
 
+## User Roles & Permissions
 
-### Mess Management System ER Diagram
-<img width="1273" height="1044" alt="Image" src="https://github.com/user-attachments/assets/87fbf06d-3ef7-49d7-93ab-cdc1074647ab" />
+| Feature | Manager 👑 | Member 👤 |
+| :--- | :---: | :---: |
+| Insert/Update Meals | ✅ | ❌ |
+| Manage Meal Expenses | ✅ | ❌ |
+| Manage Utility Costs | ✅ | ❌ |
+| Post Announcements | ✅ | ❌ |
+| Post Shopping Requests | ✅ | ✅ |
+| View Mess Notices | ✅ | ✅ |
+| Change Mess Password | ✅ | ❌ |
+| View Member Dashboard | ✅ | ✅ |
 
+## Database Architecture
 
-### Key Components:
-* **Users & Members**: Links individual profiles to mess groups and roles.
-* **Meals & Expenses**: Tracks individual meal counts and dietary spending.
-* **Utility Costs**: Dedicated tracking for rent, internet, electricity, maid, and gas.
-* **Notices**: Acts as a communication hub for mess-wide announcements and shopping requests.
+### ER Diagram
 
-## 🛠 API Implementation Details
-* **Meals**: Use `POST` to record daily entries and `PUT` for corrections.
-* **Finances**: Utilities and individual expenses are managed via `POST` and `PUT` requests.
-* **Notices**: Managers and Members use `POST` for notices, while the Manager uses `GET` to audit all records.
+<img width="1273" height="1044" alt="ER Diagram" src="https://github.com/user-attachments/assets/87fbf06d-3ef7-49d7-93ab-cdc1074647ab" />
+
+### Key Entities
+
+- **Users & Members**: Links individual profiles to mess groups with role assignments.
+- **Meals & Expenses**: Tracks daily meal counts and individual dietary spending.
+- **Utility Costs**: Covers rent, internet, electricity, maid, and gas.
+- **Notices**: Communication hub for announcements and shopping requests.
+
+## Project Structure
+
+```
+src/
+├── auth/           # JWT authentication & refresh token logic
+├── mess/           # Mess creation, joining, and management
+├── meals/          # Daily meal tracking
+├── meal-expenses/  # Individual meal expense management
+├── utility/        # Shared utility cost tracking
+├── notices/        # Announcements and shopping requests
+├── entities/       # TypeORM database entities
+├── dtos/           # Data transfer objects & validation
+└── shared/         # Shared utilities and guards
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js v18+
+- PostgreSQL
+
+### Installation
+
+```bash
+npm install
+```
+
+### Environment Setup
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+### Running the App
+
+```bash
+# Development
+npm run start:dev
+
+# Production
+npm run build
+npm run start:prod
+```
+
+### Running Tests
+
+```bash
+npm run test
+```
+
+## Related
+
+- **Android App**: [MessMasterApp](https://github.com/AlAminNahid/MessMasterApp)
