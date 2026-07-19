@@ -1,17 +1,18 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { NoticeType } from './notice_type.enum';
 
 export class NoticeDTO {
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
-  title: string;
+  title?: string;
 
   @IsString()
   @IsNotEmpty()
   description: string;
 
-  @IsOptional()
-  @IsString()
   @IsNotEmpty()
-  notice_type: string;
+  @IsEnum(NoticeType)
+  notice_type: NoticeType;
 }

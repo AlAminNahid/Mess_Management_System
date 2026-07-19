@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Post,
@@ -23,6 +24,10 @@ export class SendNoticeController {
   @Post('sendNotice')
   @UsePipes(new ValidationPipe())
   sendNotice(@Body() info: NoticeDTO, @Request() req) {
+    if (!info.title) {
+      throw new BadRequestException('title is required');
+    }
+
     const userID = req.user.userID;
     return this.sendNoticeService.sendNotice(
       info.title,
