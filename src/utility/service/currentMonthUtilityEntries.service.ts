@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
@@ -22,7 +26,9 @@ export class CurrentMonthUtilityEntriesService {
       relations: ['mess'],
     });
     if (!managerMember) {
-      throw new NotFoundException('Manager is not an active member of any mess');
+      throw new NotFoundException(
+        'Manager is not an active member of any mess',
+      );
     }
 
     const mess = await this.messRepository.findOne({
@@ -33,7 +39,9 @@ export class CurrentMonthUtilityEntriesService {
       throw new NotFoundException('Mess not found');
     }
     if (mess.id !== managerMember.mess.id) {
-      throw new ForbiddenException('This utility entry does not belong to your mess');
+      throw new ForbiddenException(
+        'This utility entry does not belong to your mess',
+      );
     }
 
     const entries = await this.utilityCostsRepository

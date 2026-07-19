@@ -6,7 +6,10 @@ import { MessesEntity } from 'src/entities/messes.entity';
 import { UserRole } from 'src/dtos/auth/role.enum';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { decryptMessPassword, encryptMessPassword } from '../mess-password.util';
+import {
+  decryptMessPassword,
+  encryptMessPassword,
+} from '../mess-password.util';
 
 @Injectable()
 export class MessPasswordService {

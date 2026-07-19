@@ -24,10 +24,7 @@ export function setAuthCookies(
 ) {
   const secure = config.get<string>('NODE_ENV') === 'production';
   const accessExpiresIn = config.get<string>('JWT_ACCESS_EXPIRES_IN', '15m');
-  const refreshExpiresIn = config.get<string>(
-    'JWT_REFRESH_EXPIRES_IN',
-    '7d',
-  );
+  const refreshExpiresIn = config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d');
 
   res.cookie('access_token', accessToken, {
     httpOnly: true,

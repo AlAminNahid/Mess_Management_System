@@ -13,7 +13,10 @@ export class MonthlyMealsService {
     private mealRepository: Repository<MealsEntity>,
   ) {}
 
-  async getMonthlyMeals(userID: number, period: 'current' | 'last' = 'current') {
+  async getMonthlyMeals(
+    userID: number,
+    period: 'current' | 'last' = 'current',
+  ) {
     const member = await this.memberRepository.findOne({
       where: { user: { id: userID }, is_active: true },
       relations: ['mess'],

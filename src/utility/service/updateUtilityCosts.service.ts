@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
@@ -40,7 +44,9 @@ export class UpdateUtilityCostsService {
       where: { user: { id: userID }, is_active: true },
     });
     if (!managerMember) {
-      throw new NotFoundException('Manager is not an active member of any mess');
+      throw new NotFoundException(
+        'Manager is not an active member of any mess',
+      );
     }
 
     const existingUtilityCosts = await this.utilityCostsRepository.findOne({
@@ -61,7 +67,9 @@ export class UpdateUtilityCostsService {
       mess.id !== managerMember.mess.id ||
       existingUtilityCosts.mess.id !== managerMember.mess.id
     ) {
-      throw new ForbiddenException('This utility cost does not belong to your mess');
+      throw new ForbiddenException(
+        'This utility cost does not belong to your mess',
+      );
     }
 
     existingUtilityCosts.electricity = electricity;

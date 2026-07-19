@@ -79,8 +79,16 @@ export class MonthlySheetService {
         date: string;
         totalMeals: number;
         totalBazar: number;
-        meals: { member_id: number; member_name: string; total_meals: number }[];
-        bazar: { member_id: number; member_name: string; total_amount: number }[];
+        meals: {
+          member_id: number;
+          member_name: string;
+          total_meals: number;
+        }[];
+        bazar: {
+          member_id: number;
+          member_name: string;
+          total_amount: number;
+        }[];
       }
     >();
 
@@ -124,8 +132,16 @@ export class MonthlySheetService {
         date: string;
         totalMeals: number;
         totalBazar: number;
-        meals: { member_id: number; member_name: string; total_meals: number }[];
-        bazar: { member_id: number; member_name: string; total_amount: number }[];
+        meals: {
+          member_id: number;
+          member_name: string;
+          total_meals: number;
+        }[];
+        bazar: {
+          member_id: number;
+          member_name: string;
+          total_amount: number;
+        }[];
       }
     >,
     date: string,

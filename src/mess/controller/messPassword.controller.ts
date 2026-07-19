@@ -12,7 +12,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { UserRole } from 'src/dtos/auth/role.enum';
-import { ChangeMessPasswordDTO, ViewMessPasswordDTO } from 'src/dtos/messes.dto';
+import {
+  ChangeMessPasswordDTO,
+  ViewMessPasswordDTO,
+} from 'src/dtos/messes.dto';
 import { MessPasswordService } from '../service/messPassword.service';
 
 @Controller('mess')

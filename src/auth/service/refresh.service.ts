@@ -43,10 +43,7 @@ export class RefreshService {
       throw new UnauthorizedException();
     }
 
-    const matches = await bcrypt.compare(
-      refreshToken,
-      user.hashedRefreshToken,
-    );
+    const matches = await bcrypt.compare(refreshToken, user.hashedRefreshToken);
     if (!matches) {
       // Token reuse / theft: invalidate the stored token so the stolen
       // refresh token can no longer be used either.
@@ -68,13 +65,10 @@ export class RefreshService {
     const access_token = await this.jwtService.signAsync(accessPayload);
 
     const newRefreshPayload = { sub: user.id, type: 'refresh' };
-    const newRefreshToken = await this.jwtService.signAsync(
-      newRefreshPayload,
-      {
-        secret: this.config.get<string>('JWT_REFRESH_SECRET'),
-        expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d'),
-      } as JwtSignOptions,
-    );
+    const newRefreshToken = await this.jwtService.signAsync(newRefreshPayload, {
+      secret: this.config.get<string>('JWT_REFRESH_SECRET'),
+      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d'),
+    } as JwtSignOptions);
 
     user.hashedRefreshToken = await bcrypt.hash(newRefreshToken, 10);
     await this.usersRepository.save(user);

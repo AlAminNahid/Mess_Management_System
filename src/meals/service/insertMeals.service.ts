@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MealsEntity } from 'src/entities/meals.entity';
 import { MembersEntity } from 'src/entities/members.entity';
@@ -35,7 +39,9 @@ export class InsertMealsService {
       where: { user: { id: userID }, is_active: true },
     });
     if (!managerMember) {
-      throw new NotFoundException('Manager is not an active member of any mess');
+      throw new NotFoundException(
+        'Manager is not an active member of any mess',
+      );
     }
 
     const memberInfo = await this.memberRepository.findOne({

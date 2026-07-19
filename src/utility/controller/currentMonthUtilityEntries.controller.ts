@@ -14,7 +14,10 @@ export class CurrentMonthUtilityEntriesController {
   ) {}
 
   @Get('currentMonthUtilityEntries/:messID')
-  getCurrentMonthUtilityEntries(@Param('messID') messID: number, @Request() req) {
+  getCurrentMonthUtilityEntries(
+    @Param('messID') messID: number,
+    @Request() req,
+  ) {
     return this.currentMonthUtilityEntriesService.getCurrentMonthUtilityEntries(
       messID,
       req.user.userID,

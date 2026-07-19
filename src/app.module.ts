@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from './data-source';
+import { dataSourceOptions } from './data-source';
 import { AuthModule } from './auth/auth.module';
 import { MessModule } from './mess/mess.module';
 import { SharedModule } from './shared/shared.module';
@@ -10,19 +10,12 @@ import { MealsModule } from './meals/meals.module';
 import { MealExpensesModule } from './meal-expenses/meal-expenses.module';
 import { NoticesModule } from './notices/notices.module';
 
-const db = new DataSource();
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
-      type: db.type,
-      host: db.host,
-      port: db.port,
-      username: db.username,
-      password: db.password,
-      database: db.database,
+      ...dataSourceOptions,
       autoLoadEntities: true,
-      synchronize: true,
     }),
     AuthModule,
     MessModule,

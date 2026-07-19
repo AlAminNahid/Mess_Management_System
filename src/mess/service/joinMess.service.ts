@@ -35,7 +35,8 @@ export class JoinMessService {
     const key = this.config.get<string>('MESS_PASSWORD_ENCRYPTION_KEY')!;
     let passwordMatches = false;
     try {
-      passwordMatches = decryptMessPassword(mess_info.password, key) === password;
+      passwordMatches =
+        decryptMessPassword(mess_info.password, key) === password;
     } catch {
       passwordMatches = false;
     }
