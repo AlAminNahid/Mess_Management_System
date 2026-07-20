@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule, JwtSignOptions } from '@nestjs/jwt';
 import { UsersEntity } from 'src/entities/users.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { MembersEntity } from 'src/entities/members.entity';
@@ -27,6 +29,10 @@ import { MonthlySheetController } from './controller/monthlySheet.controller';
 import { MonthlySheetService } from './service/monthlySheet.service';
 import { MessPasswordController } from './controller/messPassword.controller';
 import { MessPasswordService } from './service/messPassword.service';
+import { TransferOwnershipController } from './controller/transferOwnership.controller';
+import { TransferOwnershipService } from './service/transferOwnership.service';
+import { RemoveMemberController } from './controller/removeMember.controller';
+import { RemoveMemberService } from './service/removeMember.service';
 
 @Module({
   imports: [
@@ -37,6 +43,16 @@ import { MessPasswordService } from './service/messPassword.service';
       MealsEntity,
       MealExpenseIterationsEntity,
     ]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_ACCESS_SECRET'),
+        signOptions: {
+          expiresIn: config.get<string>('JWT_ACCESS_EXPIRES_IN', '15m'),
+        } as JwtSignOptions,
+      }),
+    }),
   ],
   controllers: [
     CreateMessController,
@@ -50,6 +66,8 @@ import { MessPasswordService } from './service/messPassword.service';
     CurrentMessMembersController,
     MonthlySheetController,
     MessPasswordController,
+    TransferOwnershipController,
+    RemoveMemberController,
   ],
   providers: [
     CreateMessService,
@@ -63,6 +81,8 @@ import { MessPasswordService } from './service/messPassword.service';
     CurrentMessMembersService,
     MonthlySheetService,
     MessPasswordService,
+    TransferOwnershipService,
+    RemoveMemberService,
   ],
 })
 export class MessModule {}

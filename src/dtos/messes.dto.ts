@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsPositive,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateMessDTO {
   @IsString()
@@ -57,4 +64,16 @@ export class ChangeMessPasswordDTO {
     message: `New mess password must be at least 6 characters.`,
   })
   newMessPassword: string;
+}
+
+export class TransferOwnershipDTO {
+  @IsInt()
+  @IsPositive()
+  targetMemberId: number;
+}
+
+export class RemoveMemberDTO {
+  @IsInt()
+  @IsPositive()
+  memberId: number;
 }

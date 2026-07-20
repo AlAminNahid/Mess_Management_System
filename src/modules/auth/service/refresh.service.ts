@@ -1,11 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { issueAuthTokens } from 'src/utility/issue-tokens.util';
 
 @Injectable()
 export class RefreshService {
@@ -56,22 +57,14 @@ export class RefreshService {
       where: { user: { id: user.id }, is_active: true },
     });
 
-    const accessPayload = {
-      sub: user.id,
-      email: user.email,
-      type: 'access',
-      ...(member ? { memberID: member.id, role: member.role } : {}),
-    };
-    const access_token = await this.jwtService.signAsync(accessPayload);
-
-    const newRefreshPayload = { sub: user.id, type: 'refresh' };
-    const newRefreshToken = await this.jwtService.signAsync(newRefreshPayload, {
-      secret: this.config.get<string>('JWT_REFRESH_SECRET'),
-      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN', '7d'),
-    } as JwtSignOptions);
-
-    user.hashedRefreshToken = await bcrypt.hash(newRefreshToken, 10);
-    await this.usersRepository.save(user);
+    const { access_token, refresh_token: newRefreshToken } =
+      await issueAuthTokens(
+        this.jwtService,
+        this.config,
+        this.usersRepository,
+        user,
+        member,
+      );
 
     return { access_token, refresh_token: newRefreshToken };
   }
