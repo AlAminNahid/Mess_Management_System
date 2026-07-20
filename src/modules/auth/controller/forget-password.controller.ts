@@ -5,6 +5,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { ForgetPasswordService } from '../service/forget-password.service';
 import { forgetPasswordDTO } from 'src/dtos/auth/forgetPassword.dto';
 import { UsersEntity } from 'src/entities/users.entity';
@@ -14,6 +15,7 @@ export class ForgetPasswordController {
   constructor(private readonly forgetPasswordService: ForgetPasswordService) {}
 
   @Patch('forget-password')
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @UsePipes(new ValidationPipe())
   forgetPassword(@Body() info: forgetPasswordDTO): Promise<UsersEntity> {
     return this.forgetPasswordService.forgetPassword(

@@ -1,16 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { NoticesEntity } from 'src/entities/notices.enitity';
-import { UsersEntity } from 'src/entities/users.entity';
 import { Between, Repository } from 'typeorm';
 import { getCurrentBangladeshMonthRange } from 'src/utility/bangladesh-date.util';
 
 @Injectable()
 export class GetNoticesService {
   constructor(
-    @InjectRepository(UsersEntity)
-    private userRepository: Repository<UsersEntity>,
+    @InjectRepository(MembersEntity)
+    private memberRepository: Repository<MembersEntity>,
     @InjectRepository(NoticesEntity)
     private noticeRepository: Repository<NoticesEntity>,
     @InjectRepository(MessesEntity)
@@ -18,11 +22,14 @@ export class GetNoticesService {
   ) {}
 
   async getNotices(messID: number, userID: number) {
-    const user = await this.userRepository.findOne({
-      where: { id: userID },
+    const managerMember = await this.memberRepository.findOne({
+      where: { user: { id: userID }, is_active: true },
+      relations: ['mess'],
     });
-    if (!user) {
-      throw new NotFoundException('User not found');
+    if (!managerMember) {
+      throw new NotFoundException(
+        'Manager is not an active member of any mess',
+      );
     }
 
     const mess = await this.messRepository.findOne({
@@ -30,6 +37,11 @@ export class GetNoticesService {
     });
     if (!mess) {
       throw new NotFoundException('Mess not found');
+    }
+    if (mess.id !== managerMember.mess.id) {
+      throw new ForbiddenException(
+        'These notices do not belong to your mess',
+      );
     }
 
     const { start, end } = getCurrentBangladeshMonthRange();

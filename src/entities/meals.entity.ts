@@ -7,6 +7,7 @@ import {
   Timestamp,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { MembersEntity } from './members.entity';
 
@@ -15,12 +16,14 @@ export class MealsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @ManyToOne(() => MembersEntity, (member) => member.meals)
   @JoinColumn({
     name: 'member_id',
   })
   member: MembersEntity;
 
+  @Index()
   @CreateDateColumn({
     type: 'timestamp',
   })

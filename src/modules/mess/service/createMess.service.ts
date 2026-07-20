@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -13,6 +14,8 @@ import { encryptMessPassword } from 'src/utility/mess-password.util';
 
 @Injectable()
 export class CreateMessService {
+  private readonly logger = new Logger(CreateMessService.name);
+
   constructor(
     @InjectRepository(UsersEntity)
     private usersRepository: Repository<UsersEntity>,
@@ -62,7 +65,9 @@ export class CreateMessService {
     });
     await this.memberRepository.save(memberInfo);
 
-    console.log('Mess created and member inserted successfully');
+    this.logger.log(
+      `Mess "${messInfo.name}" (id=${messInfo.id}) created by user ${userID}`,
+    );
 
     const show_info = {
       id: memberInfo.id,

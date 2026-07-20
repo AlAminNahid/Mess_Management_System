@@ -5,6 +5,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { RegisterService } from '../service/register.service';
 import { registrationDTO } from 'src/dtos/auth/registration.dto';
 import { UsersEntity } from 'src/entities/users.entity';
@@ -14,6 +15,7 @@ export class RegisterController {
   constructor(private readonly registerService: RegisterService) {}
 
   @Post('registration')
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @UsePipes(new ValidationPipe())
   registration(@Body() info: registrationDTO): Promise<UsersEntity> {
     return this.registerService.registration(

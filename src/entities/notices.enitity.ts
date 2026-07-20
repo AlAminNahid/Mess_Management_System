@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -27,11 +28,13 @@ export class NoticesEntity {
   })
   description: string;
 
+  @Index()
   @CreateDateColumn({
     type: 'timestamp',
   })
   posted_date: Timestamp;
 
+  @Index()
   @ManyToOne(() => MembersEntity, (member) => member.notices)
   @JoinColumn({
     name: 'member_id',

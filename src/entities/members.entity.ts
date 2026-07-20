@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { MessesEntity } from './messes.entity';
 import { UsersEntity } from './users.entity';
@@ -21,12 +22,14 @@ export class MembersEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @ManyToOne(() => MessesEntity, (mess) => mess.id)
   @JoinColumn({
     name: 'mess_id',
   })
   mess: MessesEntity;
 
+  @Index()
   @ManyToOne(() => UsersEntity, (user) => user.id)
   @JoinColumn({
     name: 'user_id',

@@ -11,6 +11,11 @@ export const dataSourceOptions: DataSourceOptions = {
   entities: [__dirname + '/entities/*{.ts,.js}'],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   synchronize: false,
+  extra: {
+    max: parseInt(process.env.DB_POOL_MAX ?? '10', 10),
+    connectionTimeoutMillis: 5000,
+    idleTimeoutMillis: 30000,
+  },
 };
 
 export default new DataSource(dataSourceOptions);

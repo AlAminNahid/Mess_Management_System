@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { UsersEntity } from 'src/entities/users.entity';
@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class ForgetPasswordService {
+  private readonly logger = new Logger(ForgetPasswordService.name);
+
   constructor(
     @InjectRepository(UsersEntity)
     private usersRepository: Repository<UsersEntity>,
@@ -34,7 +36,7 @@ export class ForgetPasswordService {
       { password: hashPassword },
     );
 
-    console.log('Forget password is done');
+    this.logger.log(`Password reset via forget-password for user ${existing.id}`);
 
     const { password: _, ...result } = user as any;
 

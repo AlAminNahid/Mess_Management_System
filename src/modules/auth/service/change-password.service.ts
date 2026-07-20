@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
@@ -6,6 +6,8 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ChangePasswordService {
+  private readonly logger = new Logger(ChangePasswordService.name);
+
   constructor(
     @InjectRepository(UsersEntity)
     private usersRepository: Repository<UsersEntity>,
@@ -33,7 +35,7 @@ export class ChangePasswordService {
       { password: hashPassword },
     );
 
-    console.log('User password updated successfuly');
+    this.logger.log(`Password changed for user ${existing.id}`);
 
     const { password: _, ...result } = user as any;
 

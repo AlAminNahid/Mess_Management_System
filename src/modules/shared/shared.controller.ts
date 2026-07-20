@@ -4,7 +4,6 @@ import {
   Controller,
   Patch,
   UseGuards,
-  Param,
   Request,
   UsePipes,
   ValidationPipe,
@@ -21,9 +20,10 @@ import { SharedService } from './shared.service';
 export class SharedController {
   constructor(private readonly sharedService: SharedService) {}
 
-  @Get('userById/:userID')
-  getUserById(@Param('userID') userID: string) {
-    return this.sharedService.getUserById(userID);
+  @Roles(UserRole.MANAGER, UserRole.MEMBER, UserRole.USER)
+  @Get('userById')
+  getUserById(@Request() req) {
+    return this.sharedService.getUserById(req.user.userID);
   }
 
   @Roles(UserRole.MANAGER, UserRole.MEMBER, UserRole.USER)
@@ -35,20 +35,20 @@ export class SharedController {
   }
 
   @Roles(UserRole.MANAGER, UserRole.MEMBER)
-  @Get('messByUserID/:userID')
-  getMessByUserID(@Param('userID') userID: string) {
-    return this.sharedService.getMessByUserID(userID);
+  @Get('messByUserID')
+  getMessByUserID(@Request() req) {
+    return this.sharedService.getMessByUserID(req.user.userID);
   }
 
   @Roles(UserRole.MANAGER, UserRole.MEMBER)
-  @Get('usersMeals/:userID')
-  getUserMeals(@Param('userID') userID: string) {
-    return this.sharedService.getUserMeals(userID);
+  @Get('usersMeals')
+  getUserMeals(@Request() req) {
+    return this.sharedService.getUserMeals(req.user.userID);
   }
 
   @Roles(UserRole.MANAGER, UserRole.MEMBER)
-  @Get('userMoneySubmit/:userID')
-  getUserMoneySubmit(@Param('userID') userID: string) {
-    return this.sharedService.getUserMoneySubmit(userID);
+  @Get('userMoneySubmit')
+  getUserMoneySubmit(@Request() req) {
+    return this.sharedService.getUserMoneySubmit(req.user.userID);
   }
 }

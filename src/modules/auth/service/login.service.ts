@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -14,6 +15,8 @@ import { issueAuthTokens } from 'src/utility/issue-tokens.util';
 
 @Injectable()
 export class LoginService {
+  private readonly logger = new Logger(LoginService.name);
+
   constructor(
     @InjectRepository(UsersEntity)
     private usersRepository: Repository<UsersEntity>,
@@ -34,7 +37,7 @@ export class LoginService {
       throw new UnauthorizedException('Password is incorrect');
     }
 
-    console.log('Users login successful');
+    this.logger.log(`User ${user.id} logged in successfully`);
 
     const member = await this.memberRepository.findOne({
       where: { user: { id: user.id }, is_active: true },

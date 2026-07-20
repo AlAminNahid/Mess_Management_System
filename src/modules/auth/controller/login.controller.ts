@@ -7,6 +7,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Throttle } from '@nestjs/throttler';
 import { LoginService } from '../service/login.service';
 import { loginDTO } from 'src/dtos/auth/login.dto';
 import type { Response } from 'express';
@@ -20,6 +21,7 @@ export class LoginController {
   ) {}
 
   @Post('login')
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @UsePipes(new ValidationPipe())
   async login(
     @Body() info: loginDTO,

@@ -55,6 +55,7 @@ export class JoinMessService {
       where: {
         user: { id: userID },
         mess: { id: mess_info.id },
+        is_active: true,
       },
       relations: ['user', 'mess'],
     });

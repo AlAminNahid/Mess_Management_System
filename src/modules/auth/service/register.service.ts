@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
@@ -6,6 +6,8 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class RegisterService {
+  private readonly logger = new Logger(RegisterService.name);
+
   constructor(
     @InjectRepository(UsersEntity)
     private usersRepository: Repository<UsersEntity>,
@@ -35,7 +37,7 @@ export class RegisterService {
       });
       await this.usersRepository.save(user);
 
-      console.log('Users registration successful');
+      this.logger.log(`New user registered: ${user.id}`);
 
       const { password: _, hashedRefreshToken: __, ...result } = user as any;
       return result;

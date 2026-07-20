@@ -7,6 +7,7 @@ import {
   Timestamp,
   UpdateDateColumn,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { MembersEntity } from './members.entity';
 
@@ -15,6 +16,7 @@ export class MealExpenseIterationsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @ManyToOne(() => MembersEntity, (member) => member.meal_expense)
   @JoinColumn({
     name: 'member_id',
@@ -28,6 +30,7 @@ export class MealExpenseIterationsEntity {
   })
   amount: number;
 
+  @Index()
   @CreateDateColumn({
     type: 'timestamp',
   })

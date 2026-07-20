@@ -13,7 +13,7 @@ export class AllMessesService {
     private messRepository: Repository<MessesEntity>,
   ) {}
 
-  async getAllMesses(userID: number) {
+  async getAllMesses(userID: number, page: number, limit: number) {
     const userInfo = await this.usersRepository.findOne({
       where: { id: userID },
     });
@@ -22,17 +22,23 @@ export class AllMessesService {
       throw new NotFoundException('User not found');
     }
 
-    const messes = await this.messRepository.find({
+    const [messes, total] = await this.messRepository.findAndCount({
       select: {
         id: true,
         name: true,
         address: true,
       },
+      order: { id: 'ASC' },
+      skip: (page - 1) * limit,
+      take: limit,
     });
 
     return {
       message: 'All the messes',
       messes,
+      page,
+      limit,
+      total,
     };
   }
 }

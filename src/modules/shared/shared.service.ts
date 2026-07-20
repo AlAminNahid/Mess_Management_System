@@ -20,9 +20,9 @@ export class SharedService {
     private mealExpenseRepository: Repository<MealExpenseIterationsEntity>,
   ) {}
 
-  async getUserById(userID: string) {
+  async getUserById(userID: number) {
     const user = await this.userRepository.findOne({
-      where: { id: Number(userID) },
+      where: { id: userID },
       select: ['name', 'email', 'phone', 'nid'],
     });
 
@@ -55,10 +55,11 @@ export class SharedService {
     };
   }
 
-  async getMessByUserID(userID: string) {
+  async getMessByUserID(userID: number) {
     const member = await this.membersRepository.findOne({
       where: {
-        user: { id: Number(userID) },
+        user: { id: userID },
+        is_active: true,
       },
       relations: ['mess'],
     });
@@ -70,9 +71,9 @@ export class SharedService {
     return member.mess.id;
   }
 
-  async getUserMeals(userID: string) {
+  async getUserMeals(userID: number) {
     const member = await this.membersRepository.findOne({
-      where: { user: { id: Number(userID) } },
+      where: { user: { id: userID }, is_active: true },
     });
 
     if (!member) {
@@ -90,9 +91,9 @@ export class SharedService {
     };
   }
 
-  async getUserMoneySubmit(userID: string) {
+  async getUserMoneySubmit(userID: number) {
     const member = await this.membersRepository.findOne({
-      where: { user: { id: Number(userID) } },
+      where: { user: { id: userID }, is_active: true },
     });
 
     if (!member) {

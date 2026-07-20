@@ -23,6 +23,7 @@ export class UsersEntity {
 
   @Column({
     type: 'varchar',
+    unique: true,
   })
   email: string;
 
