@@ -1,7 +1,16 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Request,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/modules/auth/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/roles.guard';
+import { MealQueryDTO } from 'src/dtos/meal_query.dto';
 import { UserRole } from 'src/dtos/auth/role.enum';
 import { MonthlySheetService } from '../service/monthlySheet.service';
 
@@ -12,7 +21,11 @@ export class MonthlySheetController {
   constructor(private readonly monthlySheetService: MonthlySheetService) {}
 
   @Get('monthlySheet')
-  getMonthlySheet(@Request() req) {
-    return this.monthlySheetService.getMonthlySheet(req.user.userID);
+  @UsePipes(new ValidationPipe())
+  getMonthlySheet(@Query() query: MealQueryDTO, @Request() req) {
+    return this.monthlySheetService.getMonthlySheet(
+      req.user.userID,
+      query.period ?? 'current',
+    );
   }
 }

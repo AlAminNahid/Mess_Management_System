@@ -4,7 +4,6 @@ import { MealExpenseIterationsEntity } from 'src/entities/meal_expense_iteration
 import { MealsEntity } from 'src/entities/meals.entity';
 import { MembersEntity } from 'src/entities/members.entity';
 import { Repository } from 'typeorm';
-import { formatDateInBangladesh } from 'src/utility/bangladesh-date.util';
 
 @Injectable()
 export class MonthlySheetService {
@@ -17,7 +16,7 @@ export class MonthlySheetService {
     private mealExpenseRepository: Repository<MealExpenseIterationsEntity>,
   ) {}
 
-  async getMonthlySheet(userID: number) {
+  async getMonthlySheet(userID: number, period: 'current' | 'last' = 'current') {
     const member = await this.memberRepository.findOne({
       where: { user: { id: userID }, is_active: true },
       relations: ['mess'],
@@ -27,136 +26,71 @@ export class MonthlySheetService {
       throw new NotFoundException('User is not an active member of any mess');
     }
 
-    const [mealRows, expenseRows] = await Promise.all([
+    const monthOffset = period === 'last' ? -1 : 0;
+
+    const [messMembers, mealTotals, expenseTotals] = await Promise.all([
+      this.memberRepository.find({
+        where: { mess: { id: member.mess.id }, is_active: true },
+        relations: ['user'],
+      }),
       this.mealRepository
         .createQueryBuilder('meal')
         .leftJoin('meal.member', 'member')
-        .leftJoin('member.user', 'user')
         .leftJoin('member.mess', 'mess')
-        .select('meal.date', 'date')
-        .addSelect('member.id', 'member_id')
-        .addSelect('user.name', 'member_name')
+        .select('member.id', 'member_id')
         .addSelect('SUM(meal.meal_count)', 'total_meals')
         .where('mess.id = :messID', { messID: member.mess.id })
         .andWhere(
-          "((meal.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') >= DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka')",
+          "((meal.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') >= DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + make_interval(months => :monthOffset)",
+          { monthOffset },
         )
         .andWhere(
-          "((meal.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') < DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + INTERVAL '1 month'",
+          "((meal.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') < DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + make_interval(months => :monthOffset + 1)",
+          { monthOffset },
         )
-        .groupBy('meal.date')
-        .addGroupBy('member.id')
-        .addGroupBy('user.name')
-        .orderBy('meal.date', 'DESC')
-        .addOrderBy('user.name', 'ASC')
+        .groupBy('member.id')
         .getRawMany(),
       this.mealExpenseRepository
         .createQueryBuilder('expense')
         .leftJoin('expense.member', 'member')
-        .leftJoin('member.user', 'user')
         .leftJoin('member.mess', 'mess')
-        .select('expense.date', 'date')
-        .addSelect('member.id', 'member_id')
-        .addSelect('user.name', 'member_name')
+        .select('member.id', 'member_id')
         .addSelect('SUM(expense.amount)', 'total_amount')
         .where('mess.id = :messID', { messID: member.mess.id })
         .andWhere(
-          "((expense.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') >= DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka')",
+          "((expense.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') >= DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + make_interval(months => :monthOffset)",
+          { monthOffset },
         )
         .andWhere(
-          "((expense.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') < DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + INTERVAL '1 month'",
+          "((expense.date AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Dhaka') < DATE_TRUNC('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Dhaka') + make_interval(months => :monthOffset + 1)",
+          { monthOffset },
         )
-        .groupBy('expense.date')
-        .addGroupBy('member.id')
-        .addGroupBy('user.name')
-        .orderBy('expense.date', 'DESC')
-        .addOrderBy('user.name', 'ASC')
+        .groupBy('member.id')
         .getRawMany(),
     ]);
 
-    const sheet = new Map<
-      string,
-      {
-        date: string;
-        totalMeals: number;
-        totalBazar: number;
-        meals: {
-          member_id: number;
-          member_name: string;
-          total_meals: number;
-        }[];
-        bazar: {
-          member_id: number;
-          member_name: string;
-          total_amount: number;
-        }[];
-      }
-    >();
+    const totalMealsByMember = new Map<number, number>(
+      mealTotals.map((row) => [Number(row.member_id), Number(row.total_meals) || 0]),
+    );
+    const totalBazarByMember = new Map<number, number>(
+      expenseTotals.map((row) => [Number(row.member_id), Number(row.total_amount) || 0]),
+    );
 
-    mealRows.forEach((row) => {
-      const date = formatDateInBangladesh(row.date);
-      const day = this.ensureDay(sheet, date);
-      const totalMeals = Number(row.total_meals) || 0;
-      day.totalMeals += totalMeals;
-      day.meals.push({
-        member_id: Number(row.member_id),
-        member_name: row.member_name,
-        total_meals: totalMeals,
-      });
-    });
-
-    expenseRows.forEach((row) => {
-      const date = formatDateInBangladesh(row.date);
-      const day = this.ensureDay(sheet, date);
-      const totalAmount = Number(row.total_amount) || 0;
-      day.totalBazar += totalAmount;
-      day.bazar.push({
-        member_id: Number(row.member_id),
-        member_name: row.member_name,
-        total_amount: totalAmount,
-      });
-    });
+    const members = messMembers
+      .map((messMember) => ({
+        member_id: messMember.id,
+        member_name: messMember.user.name,
+        total_meals: totalMealsByMember.get(messMember.id) ?? 0,
+        total_bazar: totalBazarByMember.get(messMember.id) ?? 0,
+      }))
+      .sort((a, b) => a.member_name.localeCompare(b.member_name));
 
     return {
       messID: member.mess.id,
       messName: member.mess.name,
-      days: Array.from(sheet.values()).sort((a, b) =>
-        b.date.localeCompare(a.date),
-      ),
+      totalMeals: members.reduce((sum, m) => sum + m.total_meals, 0),
+      totalBazar: members.reduce((sum, m) => sum + m.total_bazar, 0),
+      members,
     };
-  }
-
-  private ensureDay(
-    sheet: Map<
-      string,
-      {
-        date: string;
-        totalMeals: number;
-        totalBazar: number;
-        meals: {
-          member_id: number;
-          member_name: string;
-          total_meals: number;
-        }[];
-        bazar: {
-          member_id: number;
-          member_name: string;
-          total_amount: number;
-        }[];
-      }
-    >,
-    date: string,
-  ) {
-    if (!sheet.has(date)) {
-      sheet.set(date, {
-        date,
-        totalMeals: 0,
-        totalBazar: 0,
-        meals: [],
-        bazar: [],
-      });
-    }
-
-    return sheet.get(date)!;
   }
 }
