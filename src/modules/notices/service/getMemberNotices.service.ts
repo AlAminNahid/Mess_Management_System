@@ -7,7 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { NoticesEntity } from 'src/entities/notices.enitity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
+import { getCurrentBangladeshMonthRange } from 'src/utility/bangladesh-date.util';
 
 @Injectable()
 export class GetMemberNoticesService {
@@ -35,6 +36,8 @@ export class GetMemberNoticesService {
       throw new BadRequestException('The user is not a member of this mess');
     }
 
+    const { start, end } = getCurrentBangladeshMonthRange();
+
     const notices = await this.noticeRepository.find({
       select: {
         title: true,
@@ -49,7 +52,11 @@ export class GetMemberNoticesService {
         },
       },
       relations: { member: { user: true, mess: true } },
-      where: { member: { mess: { id: messID } } },
+      where: {
+        member: { mess: { id: messID } },
+        posted_date: Between(start, end),
+      },
+      order: { posted_date: 'DESC' },
     });
 
     return {

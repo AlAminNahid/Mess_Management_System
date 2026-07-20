@@ -13,7 +13,6 @@ import { RolesGuard } from 'src/modules/auth/roles.guard';
 import { UserRole } from 'src/dtos/auth/role.enum';
 import { NoticeDTO } from 'src/dtos/notice.dto';
 import { NoticeType } from 'src/dtos/notice_type.enum';
-import { currentDateInBangladesh } from 'src/utility/bangladesh-date.util';
 import { SendMemberNoticeService } from '../service/sendMemberNotice.service';
 
 const MEMBER_NOTICE_TYPE_LABELS: Record<NoticeType, string> = {
@@ -36,8 +35,7 @@ export class SendMemberNoticeController {
   @UsePipes(new ValidationPipe())
   sendNotice(@Body() info: NoticeDTO, @Request() req) {
     const userID = req.user.userID;
-    const label = MEMBER_NOTICE_TYPE_LABELS[info.notice_type];
-    const title = `${label} — ${currentDateInBangladesh()}`;
+    const title = MEMBER_NOTICE_TYPE_LABELS[info.notice_type];
 
     return this.sendMemberNoticeService.sendNotice(
       title,

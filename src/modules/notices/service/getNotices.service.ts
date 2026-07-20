@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MessesEntity } from 'src/entities/messes.entity';
 import { NoticesEntity } from 'src/entities/notices.enitity';
 import { UsersEntity } from 'src/entities/users.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
+import { getCurrentBangladeshMonthRange } from 'src/utility/bangladesh-date.util';
 
 @Injectable()
 export class GetNoticesService {
@@ -31,6 +32,8 @@ export class GetNoticesService {
       throw new NotFoundException('Mess not found');
     }
 
+    const { start, end } = getCurrentBangladeshMonthRange();
+
     const notices = await this.noticeRepository.find({
       select: {
         title: true,
@@ -54,7 +57,9 @@ export class GetNoticesService {
         member: {
           mess: { id: messID },
         },
+        posted_date: Between(start, end),
       },
+      order: { posted_date: 'DESC' },
     });
 
     return {

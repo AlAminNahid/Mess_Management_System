@@ -29,3 +29,13 @@ export function currentMonthInBangladesh(): string {
 
   return `${year}-${month}`;
 }
+
+// Bangladesh has a fixed UTC+6 offset (no DST), so the current month's
+// boundaries in Asia/Dhaka can be computed directly as UTC instants.
+export function getCurrentBangladeshMonthRange(): { start: Date; end: Date } {
+  const [year, month] = currentMonthInBangladesh().split('-').map(Number);
+  const start = new Date(Date.UTC(year, month - 1, 1, -6));
+  const end = new Date(Date.UTC(year, month, 1, -6));
+
+  return { start, end };
+}
