@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { MembersEntity } from 'src/entities/members.entity';
 import { UsersEntity } from 'src/entities/users.entity';
+import { UserRole } from 'src/dtos/auth/role.enum';
 
 export async function issueAuthTokens(
   jwtService: JwtService,
@@ -16,7 +17,9 @@ export async function issueAuthTokens(
     sub: user.id,
     email: user.email,
     type: 'access',
-    ...(member ? { memberID: member.id, role: member.role } : {}),
+    ...(member
+      ? { memberID: member.id, role: member.role }
+      : { role: UserRole.USER }),
   };
   const access_token = await jwtService.signAsync(accessPayload);
 
