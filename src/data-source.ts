@@ -11,6 +11,7 @@ export const dataSourceOptions: DataSourceOptions = {
   entities: [__dirname + '/entities/*{.ts,.js}'],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
   synchronize: false,
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
   extra: {
     max: parseInt(process.env.DB_POOL_MAX ?? '10', 10),
     connectionTimeoutMillis: 5000,
