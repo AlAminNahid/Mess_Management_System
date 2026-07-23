@@ -77,3 +77,11 @@ export class RemoveMemberDTO {
   @IsPositive()
   memberId: number;
 }
+
+export class DeleteMessDTO {
+  @IsString()
+  @IsNotEmpty({
+    message: `Account password can't be empty.`,
+  })
+  accountPassword: string;
+}

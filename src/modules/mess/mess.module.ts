@@ -33,6 +33,8 @@ import { TransferOwnershipController } from './controller/transferOwnership.cont
 import { TransferOwnershipService } from './service/transferOwnership.service';
 import { RemoveMemberController } from './controller/removeMember.controller';
 import { RemoveMemberService } from './service/removeMember.service';
+import { DeleteMessController } from './controller/deleteMess.controller';
+import { DeleteMessService } from './service/deleteMess.service';
 
 @Module({
   imports: [
@@ -68,6 +70,7 @@ import { RemoveMemberService } from './service/removeMember.service';
     MessPasswordController,
     TransferOwnershipController,
     RemoveMemberController,
+    DeleteMessController,
   ],
   providers: [
     CreateMessService,
@@ -83,6 +86,7 @@ import { RemoveMemberService } from './service/removeMember.service';
     MessPasswordService,
     TransferOwnershipService,
     RemoveMemberService,
+    DeleteMessService,
   ],
 })
 export class MessModule {}

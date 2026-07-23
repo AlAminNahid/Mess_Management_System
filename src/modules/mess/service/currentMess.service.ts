@@ -14,6 +14,8 @@ export class CurrentMessService {
     const member = await this.memberRepository.findOne({
       where: {
         user: { id: userID },
+        is_active: true,
+        mess: { is_active: true },
       },
       relations: ['user', 'mess'],
     });
