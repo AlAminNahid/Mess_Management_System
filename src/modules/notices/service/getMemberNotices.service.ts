@@ -1,5 +1,5 @@
 import {
-  BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -30,10 +30,10 @@ export class GetMemberNoticesService {
     }
 
     const validateUser = await this.memberRepository.findOne({
-      where: { user: { id: userID }, mess: { id: messID } },
+      where: { user: { id: userID }, mess: { id: messID }, is_active: true },
     });
     if (!validateUser) {
-      throw new BadRequestException('The user is not a member of this mess');
+      throw new ForbiddenException('You are no longer an active member of any mess.');
     }
 
     const { start, end } = getCurrentBangladeshMonthRange();

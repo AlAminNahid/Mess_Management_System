@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
 import { NoticesEntity } from 'src/entities/notices.enitity';
@@ -30,10 +30,10 @@ export class SendNoticeService {
     }
 
     const member = await this.memberRepository.findOne({
-      where: { user: { id: userID } },
+      where: { user: { id: userID }, is_active: true },
     });
     if (!member) {
-      throw new NotFoundException('Member not found');
+      throw new ForbiddenException('You are no longer an active member of any mess.');
     }
 
     const notice = await this.noticeRepository.create({

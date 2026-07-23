@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MembersEntity } from 'src/entities/members.entity';
+import { UsersEntity } from 'src/entities/users.entity';
 import { UserRole } from 'src/dtos/auth/role.enum';
 
 @Injectable()
@@ -14,6 +15,8 @@ export class RemoveMemberService {
   constructor(
     @InjectRepository(MembersEntity)
     private memberRepository: Repository<MembersEntity>,
+    @InjectRepository(UsersEntity)
+    private userRepository: Repository<UsersEntity>,
   ) {}
 
   async removeMember(userID: number, memberId: number) {
@@ -38,6 +41,7 @@ export class RemoveMemberService {
         is_active: true,
         mess: { id: manager.mess.id },
       },
+      relations: ['user'],
     });
 
     if (!target) {
@@ -47,6 +51,12 @@ export class RemoveMemberService {
     await this.memberRepository.update(target.id, {
       is_active: false,
       leave_date: new Date(),
+    });
+
+    // Invalidate the removed member's refresh token so their session ends
+    // on the next token refresh rather than lingering for the full refresh TTL.
+    await this.userRepository.update(target.user.id, {
+      hashedRefreshToken: null,
     });
 
     return { message: 'Member removed from the mess' };
