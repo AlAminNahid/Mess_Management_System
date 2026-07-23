@@ -23,7 +23,7 @@ export class SharedService {
   async getUserById(userID: number) {
     const user = await this.userRepository.findOne({
       where: { id: userID },
-      select: ['name', 'email', 'phone', 'nid'],
+      select: ['name', 'email', 'phone'],
     });
 
     if (!user) {
@@ -51,7 +51,6 @@ export class SharedService {
       name: user.name,
       email: user.email,
       phone: user.phone,
-      nid: user.nid,
     };
   }
 

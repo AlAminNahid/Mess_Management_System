@@ -35,13 +35,6 @@ export class UsersEntity {
   @Column({
     type: 'varchar',
     unique: true,
-    length: 14,
-  })
-  nid: string;
-
-  @Column({
-    type: 'varchar',
-    unique: true,
   })
   phone: string;
 

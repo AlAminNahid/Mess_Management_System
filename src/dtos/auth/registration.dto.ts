@@ -43,12 +43,6 @@ export class registrationDTO {
   password: string;
 
   @IsString()
-  @Matches(/^\d{14}$/, {
-    message: 'Nid must contain 14 digits & only numbers',
-  })
-  nid: string;
-
-  @IsString()
   @Matches(/^01[0-9]+$/, {
     message: 'Phone number should only contain numbers & should start with 01',
   })

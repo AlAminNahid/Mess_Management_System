@@ -22,7 +22,6 @@ export class RegisterController {
       info.name,
       info.email,
       info.password,
-      info.nid,
       info.phone,
     );
   }

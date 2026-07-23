@@ -17,7 +17,6 @@ export class RegisterService {
     name: string,
     email: string,
     password: string,
-    nid: string,
     phone: string,
   ): Promise<UsersEntity> {
     const existing = await this.usersRepository.findOne({ where: { email } });
@@ -32,7 +31,6 @@ export class RegisterService {
         name,
         email,
         password: hashPassword,
-        nid,
         phone,
       });
       await this.usersRepository.save(user);
@@ -43,11 +41,11 @@ export class RegisterService {
       return result;
     } catch (error: any) {
       if (error.code === '23505') {
-        if (error.detail.includes('nid')) {
-          throw new ConflictException('NID already exists');
-        }
         if (error.detail.includes('email')) {
           throw new ConflictException('Email already exists');
+        }
+        if (error.detail.includes('phone')) {
+          throw new ConflictException('Phone already exists');
         }
       }
       throw error;
