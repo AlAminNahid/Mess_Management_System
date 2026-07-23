@@ -1,4 +1,5 @@
 import {
+  IsEmail,
   IsInt,
   IsNotEmpty,
   IsPositive,
@@ -84,4 +85,30 @@ export class DeleteMessDTO {
     message: `Account password can't be empty.`,
   })
   accountPassword: string;
+}
+
+export class SearchUserByEmailDTO {
+  @IsEmail(
+    {},
+    {
+      message: `Please provide a valid email address.`,
+    },
+  )
+  email: string;
+}
+
+export class InviteMemberDTO {
+  @IsEmail(
+    {},
+    {
+      message: `Please provide a valid email address.`,
+    },
+  )
+  email: string;
+}
+
+export class RespondInviteDTO {
+  @IsInt()
+  @IsPositive()
+  inviteId: number;
 }

@@ -54,13 +54,14 @@ export class JoinMessService {
     const existing_member = await this.memberRepository.findOne({
       where: {
         user: { id: userID },
-        mess: { id: mess_info.id },
         is_active: true,
       },
       relations: ['user', 'mess'],
     });
     if (existing_member) {
-      throw new BadRequestException('User is already a member of a mess');
+      throw new BadRequestException(
+        'You are already a member of a mess. Leave your current mess before joining another one.',
+      );
     }
 
     const member = await this.memberRepository.create({

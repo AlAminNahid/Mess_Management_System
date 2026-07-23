@@ -7,6 +7,7 @@ import { MessesEntity } from 'src/entities/messes.entity';
 import { MembersEntity } from 'src/entities/members.entity';
 import { MealsEntity } from 'src/entities/meals.entity';
 import { MealExpenseIterationsEntity } from 'src/entities/meal_expense_iterations.entity';
+import { InvitesEntity } from 'src/entities/invites.entity';
 import { CreateMessController } from './controller/createMess.controller';
 import { CreateMessService } from './service/createMess.service';
 import { JoinMessService } from './service/joinMess.service';
@@ -35,6 +36,16 @@ import { RemoveMemberController } from './controller/removeMember.controller';
 import { RemoveMemberService } from './service/removeMember.service';
 import { DeleteMessController } from './controller/deleteMess.controller';
 import { DeleteMessService } from './service/deleteMess.service';
+import { SearchUserByEmailController } from './controller/searchUserByEmail.controller';
+import { SearchUserByEmailService } from './service/searchUserByEmail.service';
+import { InviteMemberController } from './controller/inviteMember.controller';
+import { InviteMemberService } from './service/inviteMember.service';
+import { PendingInviteController } from './controller/pendingInvite.controller';
+import { PendingInviteService } from './service/pendingInvite.service';
+import { AcceptInviteController } from './controller/acceptInvite.controller';
+import { AcceptInviteService } from './service/acceptInvite.service';
+import { DeclineInviteController } from './controller/declineInvite.controller';
+import { DeclineInviteService } from './service/declineInvite.service';
 
 @Module({
   imports: [
@@ -44,6 +55,7 @@ import { DeleteMessService } from './service/deleteMess.service';
       MembersEntity,
       MealsEntity,
       MealExpenseIterationsEntity,
+      InvitesEntity,
     ]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -71,6 +83,11 @@ import { DeleteMessService } from './service/deleteMess.service';
     TransferOwnershipController,
     RemoveMemberController,
     DeleteMessController,
+    SearchUserByEmailController,
+    InviteMemberController,
+    PendingInviteController,
+    AcceptInviteController,
+    DeclineInviteController,
   ],
   providers: [
     CreateMessService,
@@ -87,6 +104,11 @@ import { DeleteMessService } from './service/deleteMess.service';
     TransferOwnershipService,
     RemoveMemberService,
     DeleteMessService,
+    SearchUserByEmailService,
+    InviteMemberService,
+    PendingInviteService,
+    AcceptInviteService,
+    DeclineInviteService,
   ],
 })
 export class MessModule {}

@@ -68,6 +68,7 @@ export class GetNoticesService {
       where: {
         member: {
           mess: { id: messID },
+          is_active: true,
         },
         posted_date: Between(start, end),
       },

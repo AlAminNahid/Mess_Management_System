@@ -32,6 +32,15 @@ export class CreateMessService {
     password: string,
     userID: number,
   ) {
+    const existingMembership = await this.memberRepository.findOne({
+      where: { user: { id: userID }, is_active: true },
+    });
+    if (existingMembership) {
+      throw new BadRequestException(
+        'You are already a member of a mess. Leave your current mess before creating another one.',
+      );
+    }
+
     const existing = await this.messRepository.findOne({ where: { name } });
     if (existing) {
       throw new BadRequestException(

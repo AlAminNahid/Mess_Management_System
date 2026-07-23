@@ -53,7 +53,7 @@ export class GetMemberNoticesService {
       },
       relations: { member: { user: true, mess: true } },
       where: {
-        member: { mess: { id: messID } },
+        member: { mess: { id: messID }, is_active: true },
         posted_date: Between(start, end),
       },
       order: { posted_date: 'DESC' },
